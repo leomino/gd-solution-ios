@@ -22,8 +22,8 @@ class PredictionViewModel: LoadingStateModel<Prediction?> {
         super.init(state: state)
     }
     
-    func fetchPredictionBy(username: User.ID, for matchId: Match.ID) {
-        requests.send(dataService.fetchBy(username: username, for: matchId))
+    func fetchPredictionBy(matchId: Match.ID) {
+        requests.send(dataService.fetchBy(matchId: matchId))
     }
 }
 
@@ -103,7 +103,7 @@ struct PredictionView: View {
         }
         .padding()
         .onAppear {
-            viewModel.fetchPredictionBy(username: "leokeo123", for: match.id)
+            viewModel.fetchPredictionBy(matchId: match.id)
         }
         .onChange(of: viewModel.state) {
             switch viewModel.state {

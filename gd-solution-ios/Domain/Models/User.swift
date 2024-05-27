@@ -13,7 +13,7 @@ struct User: Identifiable, Codable, Equatable {
     }
     let username: String
     let name: String
-    let supports: Team
+    let supports: Team?
     let points: Int
     
     static var mock: User {

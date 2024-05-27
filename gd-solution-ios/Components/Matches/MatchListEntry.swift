@@ -9,6 +9,14 @@ import SwiftUI
 
 struct MatchListEntry: View {
     var match: Match
+    
+    var prediction: String {
+        if let prediction = match.prediction {
+            return "Gewettet \(prediction.homeTeamScore) zu \(prediction.awayTeamScore)"
+        }
+        return "Noch nicht gewettet"
+    }
+    
     var body: some View {
         HStack(spacing: 16) {
             HStack(spacing: 4) {
@@ -33,9 +41,9 @@ struct MatchListEntry: View {
                     .lineLimit(1)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                Text("Gewettet: 1 zu 2")
+                Text(prediction)
                     .font(.subheadline)
-                    .foregroundStyle(.secondary)
+                    .tint(.yellow)
             }
         }
     }

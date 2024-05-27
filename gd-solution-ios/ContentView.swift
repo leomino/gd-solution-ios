@@ -8,13 +8,31 @@
 import SwiftUI
 
 struct ContentView: View {
+    @StateObject var authModel: AuthenticationModel
+    
+    init(authModel: AuthenticationModel = AuthenticationModel()) {
+        _authModel = StateObject(wrappedValue: authModel)
+    }
+    
     var body: some View {
         NavigationStack {
-            TournamentsView()
+            Group {
+                switch authModel.state {
+                case .authenticated:
+                    TournamentsView()
+                default:
+                    AuthenticationView(authModel: authModel)
+                }
+            }
+            .onChange(of: authModel.state) {
+                if case .authenticated(_, let token) = authModel.state {
+                    UserDefaults.standard.set(token, forKey: "token")
+                }
+            }
         }
     }
 }
 
 #Preview {
-    ContentView()
+    ContentView(authModel: .init(dataService: AuthenticationDataServiceMock()))
 }

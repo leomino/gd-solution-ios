@@ -40,7 +40,7 @@ open class LoadingStateModel<T: Equatable>: ObservableObject {
 
     /// Initializes by setting the state to a predefined value.
     /// If no value provided, the state is set to idle as there is nothing else to do.
-    public init(state: LoadingState<T> = .idle) {
+    public init(state: LoadingState<T>) {
         self.state = state
         setupRequestPublisher()
     }

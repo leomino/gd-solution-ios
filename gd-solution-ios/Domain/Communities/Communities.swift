@@ -10,10 +10,18 @@ import Foundation
 
 class CommunityDataService: CommunityDataServiceProtocol {
     func fetchAll() -> AnyPublisher<[Community], Error> {
+        guard let token = UserDefaults.standard.string(forKey: "token") else {
+            return Fail(error: URLError(.userAuthenticationRequired)).eraseToAnyPublisher()
+        }
         guard let url = URL(string: "http://localhost:3000/api/communities") else {
             return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
         }
-        return URLSession.shared.dataTaskPublisher(for: url)
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
             .validateResponse()
             .decode(type: [Community].self, decoder: JSONCoder.decoder)
             .eraseToAnyPublisher()
