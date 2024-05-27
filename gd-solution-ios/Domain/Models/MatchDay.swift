@@ -11,7 +11,7 @@ struct MatchDay: Identifiable, Codable, Equatable {
     public let id: UUID
     public let from: Date
     public let to: Date
-    public let matches: [Match]
+    public var matches: [Match]
     
     var dateRangeFormatted: String {
         let formatter = DateFormatter()

@@ -14,7 +14,7 @@ struct Match: Identifiable, Codable, Equatable {
     public let homeTeamScore: Int?
     public let awayTeamScore: Int?
     public let winnerTeam: Team?
-    public let prediction: Prediction?
+    public var prediction: Prediction?
     public let startAt: Date
         
     var startAtFormatted: String {

@@ -26,12 +26,22 @@ class MatchesViewModel: LoadingStateModel<[Match]> {
     func fetchNextMatches() {
         requests.send(dataService.fetchNext())
     }
+    
+    func upsertPredictionInStore(for matchId: Match.ID, with prediction: Prediction) {
+        if case .success(var matches) = state {
+            if let index = matches.firstIndex(where: { $0.id == matchId }) {
+                matches[index].prediction = prediction
+            }
+            state = .success(matches)
+        }
+    }
 }
 
 struct TournamentDashboard: View {
     let tournament: Tournament
     @ObservedObject var matchViewModel = MatchesViewModel()
     @ObservedObject var communityViewModel = CommunitiesViewModel()
+    @State private var selectedMatch: Match? = nil
     
     init(
         tournament: Tournament,
@@ -63,11 +73,10 @@ struct TournamentDashboard: View {
                     ProgressView()
                 case .success(let matches):
                     ForEach(matches) { match in
-                        NavigationLink {
-                            PredictionView(match: match)
-                        } label: {
-                            MatchListEntry(match: match)
-                        }
+                        MatchListEntry(match: match)
+                            .onTapGesture {
+                                selectedMatch = match
+                            }
                     }
                 case .failure(let error):
                     Label(error.localizedDescription, systemImage: "exclamationmark.triangle")
@@ -118,6 +127,12 @@ struct TournamentDashboard: View {
         .refreshable {
             communityViewModel.fetchCommunities()
             matchViewModel.fetchNextMatches()
+        }
+        .sheet(item: $selectedMatch) { match in
+            PredictionView(match: match, onUpsert: { matchId, prediction in
+                matchViewModel.upsertPredictionInStore(for: matchId, with: prediction)
+            })
+            .presentationDetents([.medium])
         }
     }
 }

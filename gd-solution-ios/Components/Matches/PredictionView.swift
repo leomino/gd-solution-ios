@@ -9,8 +9,6 @@ import SwiftUI
 
 class PredictionViewModel: LoadingStateModel<Prediction?> {
     let dataService: PredictionDataServiceProtocol
-    @Published var homeTeamScore: Int?
-    @Published var awayTeamScore: Int?
     
     init(dataService: PredictionDataServiceProtocol = PredictionDataService()) {
         self.dataService = dataService
@@ -22,27 +20,40 @@ class PredictionViewModel: LoadingStateModel<Prediction?> {
         super.init(state: state)
     }
     
-    func fetchPredictionBy(matchId: Match.ID) {
-        requests.send(dataService.fetchBy(matchId: matchId))
+    func upsertBy(matchId: Match.ID, homeTeamScore: Int, awayTeamScore: Int) {
+        requests.send(dataService.upsertBy(
+            matchId: matchId,
+            prediction: .init(homeTeamScore: homeTeamScore, awayTeamScore: awayTeamScore))
+        )
     }
 }
 
 struct PredictionView: View {
+    @Environment(\.dismiss) var dismiss
     @ObservedObject private var viewModel: PredictionViewModel
+    @State private var homeTeamScore: Int?
+    @State private var awayTeamScore: Int?
     var match: Match
+    var onUpsert: (Match.ID, Prediction) -> Void
     
-    init(match: Match, dataService: PredictionDataServiceProtocol = PredictionDataService()) {
+    init(match: Match, dataService: PredictionDataServiceProtocol = PredictionDataService(), onUpsert: @escaping (Match.ID, Prediction) -> Void) {
         self.match = match
+        self.onUpsert = onUpsert
+        _homeTeamScore = State(wrappedValue: match.prediction?.homeTeamScore)
+        _awayTeamScore = State(wrappedValue: match.prediction?.awayTeamScore)
         _viewModel = ObservedObject(wrappedValue: .init(dataService: dataService))
     }
     
-    init(match: Match, state: LoadingState<Prediction?>, dataService: PredictionDataServiceProtocol) {
+    init(match: Match, state: LoadingState<Prediction?>, dataService: PredictionDataServiceProtocol, onUpsert: @escaping (Match.ID, Prediction) -> Void) {
         self.match = match
+        self.onUpsert = onUpsert
+        _homeTeamScore = State(wrappedValue: match.prediction?.homeTeamScore)
+        _awayTeamScore = State(wrappedValue: match.prediction?.awayTeamScore)
         _viewModel = ObservedObject(wrappedValue: .init(state: state, dataService: dataService))
     }
     
     var betInvalid: Bool {
-        if let homeTeamScore = viewModel.homeTeamScore, let awayTeamScore = viewModel.awayTeamScore {
+        if let homeTeamScore = homeTeamScore, let awayTeamScore = awayTeamScore {
             return homeTeamScore < 0 && awayTeamScore < 0
         }
         return true
@@ -77,41 +88,38 @@ struct PredictionView: View {
                 .frame(width: geo.size.width)
                 .aspectRatio(contentMode: .fit)
             }
-            switch viewModel.state {
-            case .loading:
-                ProgressView()
-            case .success, .failure, .idle:
-                HStack(spacing: 16) {
-                    TextField("Home Score", value: $viewModel.homeTeamScore, format: .number, prompt: Text("0"))
-                        .keyboardType(.numberPad)
-                        .font(.system(size: 48, weight: .medium, design: .monospaced))
-                        .minimumScaleFactor(0.3)
-                        .multilineTextAlignment(.center)
-                    
-                    Text(":")
-                    
-                    TextField("Away Score", value: $viewModel.awayTeamScore, format: .number, prompt: Text("0"))
-                        .keyboardType(.numberPad)
-                        .font(.system(size: 48, weight: .medium, design: .monospaced))
-                        .minimumScaleFactor(0.3)
-                        .multilineTextAlignment(.center)
-                }
-                Spacer()
-                Button("Wette speichern") { }
-                    .disabled(betInvalid)
+            HStack(spacing: 16) {
+                TextField("Home Score", value: $homeTeamScore, format: .number, prompt: Text("0"))
+                    .keyboardType(.numberPad)
+                    .font(.system(size: 48, weight: .medium, design: .monospaced))
+                    .minimumScaleFactor(0.3)
+                    .multilineTextAlignment(.center)
+                
+                Text(":")
+                
+                TextField("Away Score", value: $awayTeamScore, format: .number, prompt: Text("0"))
+                    .keyboardType(.numberPad)
+                    .font(.system(size: 48, weight: .medium, design: .monospaced))
+                    .minimumScaleFactor(0.3)
+                    .multilineTextAlignment(.center)
             }
+            Spacer()
+            Button("Wette speichern") {
+                guard let homeTeamScore, let awayTeamScore else {
+                    return
+                }
+                viewModel.upsertBy(matchId: match.id, homeTeamScore: homeTeamScore, awayTeamScore: awayTeamScore)
+            }
+            .disabled(betInvalid)
         }
         .padding()
-        .onAppear {
-            viewModel.fetchPredictionBy(matchId: match.id)
-        }
         .onChange(of: viewModel.state) {
             switch viewModel.state {
             case .success(let prediction):
-                if let awayScore = prediction?.awayTeamScore, let homeScore = prediction?.homeTeamScore {
-                    viewModel.awayTeamScore = awayScore
-                    viewModel.homeTeamScore = homeScore
+                if let prediction {
+                    onUpsert(match.id, prediction)
                 }
+                dismiss.callAsFunction()
             default:
                 return
             }
@@ -123,18 +131,18 @@ struct PredictionView: View {
 
 #Preview("Success") {
     NavigationStack {
-        PredictionView(match: .mock, dataService: PredictionDataServiceMock())
+        PredictionView(match: .mock, dataService: PredictionDataServiceMock()) { _, _ in }
     }
 }
 
 #Preview("Loading") {
     NavigationStack {
-        PredictionView(match: .mock, state: .loading, dataService: PredictionDataServiceMock())
+        PredictionView(match: .mock, state: .loading, dataService: PredictionDataServiceMock()) { _, _ in }
     }
 }
 
 #Preview("Error") {
     NavigationStack {
-        PredictionView(match: .mock, state: .failure(NSError.notFound), dataService: PredictionDataServiceMock())
+        PredictionView(match: .mock, state: .failure(NSError.notFound), dataService: PredictionDataServiceMock()) { _, _ in }
     }
 }

@@ -22,6 +22,19 @@ class MatchDayViewModel: LoadingStateModel<[MatchDay]> {
     func fetchMatches() {
         requests.send(dataService.fetchAll())
     }
+    
+    func upsertPredictionInStore(for matchId: Match.ID, with prediction: Prediction) {
+        if case .success(var matchDays) = state {
+            if let matchDayIndex = matchDays.firstIndex(where: { $0.matches.contains(where: { match in match.id == matchId }) }) {
+                var matches = matchDays[matchDayIndex].matches
+                if let index = matches.firstIndex(where: { $0.id == matchId }) {
+                    matches[index].prediction = prediction
+                }
+                matchDays[matchDayIndex].matches = matches
+                state = .success(matchDays)
+            }
+        }
+    }
 }
 
 struct MatchesView: View {
@@ -49,7 +62,9 @@ struct MatchesView: View {
                             Section(matchDay.dateRangeFormatted) {
                                 ForEach(matchDay.matches) { match in
                                     NavigationLink {
-                                        PredictionView(match: match)
+                                        PredictionView(match: match, onUpsert: { matchId, prediction in
+                                            viewModel.upsertPredictionInStore(for: matchId, with: prediction)
+                                        })
                                     } label: {
                                         MatchListEntry(match: match)
                                     }
