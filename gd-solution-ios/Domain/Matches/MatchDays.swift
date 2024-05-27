@@ -10,7 +10,7 @@ import Foundation
 
 class MatchDayDataService: MatchDayDataServiceProtocol {
     func fetchAll() -> AnyPublisher<[MatchDay], Error> {
-        guard let token = UserDefaults.standard.string(forKey: "token") else {
+        guard let token = UserDefaults.standard.string(forKey: AuthenticationModel.TOKEN) else {
             return Fail(error: URLError(.userAuthenticationRequired)).eraseToAnyPublisher()
         }
         guard let url = URL(string: "http://localhost:3000/api/match-days") else {

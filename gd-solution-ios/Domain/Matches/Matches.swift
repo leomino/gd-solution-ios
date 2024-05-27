@@ -10,7 +10,7 @@ import Foundation
 
 class MatchDataService: MatchDataServiceProtocol {
     func fetchAll() -> AnyPublisher<[Match], Error> {
-        guard let token = UserDefaults.standard.string(forKey: "token") else {
+        guard let token = UserDefaults.standard.string(forKey: AuthenticationModel.TOKEN) else {
             return Fail(error: URLError(.userAuthenticationRequired)).eraseToAnyPublisher()
         }
         guard let url = URL(string: "http://localhost:3000/api/matches") else {
@@ -28,7 +28,7 @@ class MatchDataService: MatchDataServiceProtocol {
     }
     
     func fetchNext() -> AnyPublisher<[Match], Error> {
-        guard let token = UserDefaults.standard.string(forKey: "token") else {
+        guard let token = UserDefaults.standard.string(forKey: AuthenticationModel.TOKEN) else {
             return Fail(error: URLError(.userAuthenticationRequired)).eraseToAnyPublisher()
         }
         guard let url = URL(string: "http://localhost:3000/api/matches/next") else {

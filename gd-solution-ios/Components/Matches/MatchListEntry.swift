@@ -23,27 +23,35 @@ struct MatchListEntry: View {
                 Image(match.homeTeam.nameShort)
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 45, height: 45, alignment: .center)
+                    .frame(width: 40, height: 40, alignment: .center)
                     .background(.secondary)
                     .clipShape(Circle())
                 
                 Image(match.awayTeam.nameShort)
                     .resizable()
                     .scaledToFill()
-                    .frame(width: 45, height: 45, alignment: .center)
+                    .frame(width: 40, height: 40, alignment: .center)
                     .background(.secondary)
                     .clipShape(Circle())
             }
-            VStack(alignment: .leading) {
+            VStack(alignment: .leading, spacing: 4) {
                 Text(match.startAtFormatted)
                     .font(.headline)
+                HStack {
+                    Text(prediction)
+                        .font(.subheadline)
+                    Spacer()
+                    if match.prediction == nil {
+                        Circle()
+                            .fill(.blue)
+                            .frame(width: 16, height: 16)
+                    }
+                }
                 Text("\(match.homeTeam.name) vs. \(match.awayTeam.name)")
                     .lineLimit(1)
+                    .minimumScaleFactor(0.9)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
-                Text(prediction)
-                    .font(.subheadline)
-                    .tint(.yellow)
             }
         }
     }

@@ -11,7 +11,7 @@ import Combine
 
 enum AuthenticationState: Equatable {
     case pending
-    case authenticated(user: User, token: String)
+    case authenticated(token: String)
     case unauthenticated
     case failure(Error)
     
@@ -19,8 +19,8 @@ enum AuthenticationState: Equatable {
         switch (lhs, rhs) {
         case (.pending, .pending), (.unauthenticated, .unauthenticated):
             return true
-        case let (.authenticated(lhsUser, lhsToken), .authenticated(rhsUser, rhsToken)):
-            return lhsUser == rhsUser && lhsToken == rhsToken
+        case let (.authenticated(lhsValue), .authenticated(rhsValue)):
+            return lhsValue == rhsValue
         case let (.failure(lhsError as NSError), .failure(rhsError as NSError)):
             return lhsError == rhsError
         default:
@@ -104,7 +104,8 @@ class AuthenticationModel: ObservableObject {
     private let dataService: AuthenticationDataServiceProtocol
     private var requests = PassthroughSubject<AnyPublisher<AuthResponse, Error>, Never>()
     private var cancellables = Set<AnyCancellable>()
-
+    public static var TOKEN = "token"
+    
     public init(
         dataService: AuthenticationDataServiceProtocol = AuthenticationDataService()
     ) {
@@ -134,7 +135,7 @@ class AuthenticationModel: ObservableObject {
                     self?.state = .failure(error)
                 }
             } receiveValue: { [weak self] result in
-                self?.state = .authenticated(user: result.user, token: result.token)
+                self?.state = .authenticated(token: result.token)
             }
             .store(in: &cancellables)
     }

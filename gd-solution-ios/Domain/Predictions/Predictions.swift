@@ -10,7 +10,7 @@ import Foundation
 
 class PredictionDataService: PredictionDataServiceProtocol {
     func fetchBy(matchId: Match.ID) -> AnyPublisher<Prediction?, Error> {
-        guard let token = UserDefaults.standard.string(forKey: "token") else {
+        guard let token = UserDefaults.standard.string(forKey: AuthenticationModel.TOKEN) else {
             return Fail(error: URLError(.userAuthenticationRequired)).eraseToAnyPublisher()
         }
         guard let url = URL(string: "http://localhost:3000/api/predictions?matchId=\(matchId)") else {
@@ -28,7 +28,7 @@ class PredictionDataService: PredictionDataServiceProtocol {
     }
     
     func fetchBy(matchIds: [Match.ID]) -> AnyPublisher<[Prediction], Error> {
-        guard let token = UserDefaults.standard.string(forKey: "token") else {
+        guard let token = UserDefaults.standard.string(forKey: AuthenticationModel.TOKEN) else {
             return Fail(error: URLError(.userAuthenticationRequired)).eraseToAnyPublisher()
         }
         guard let url = URL(string: "http://localhost:3000/api/predictions") else {

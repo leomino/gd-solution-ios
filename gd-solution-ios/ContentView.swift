@@ -12,6 +12,9 @@ struct ContentView: View {
     
     init(authModel: AuthenticationModel = AuthenticationModel()) {
         _authModel = StateObject(wrappedValue: authModel)
+        if let token = UserDefaults.standard.string(forKey: AuthenticationModel.TOKEN) {
+            authModel.state = .authenticated(token: token)
+        }
     }
     
     var body: some View {
@@ -25,8 +28,18 @@ struct ContentView: View {
                 }
             }
             .onChange(of: authModel.state) {
-                if case .authenticated(_, let token) = authModel.state {
-                    UserDefaults.standard.set(token, forKey: "token")
+                if case .authenticated(let token) = authModel.state {
+                    UserDefaults.standard.set(token, forKey: AuthenticationModel.TOKEN)
+                }
+            }
+            .toolbar {
+                if case .authenticated = authModel.state {
+                    ToolbarItem(placement: .primaryAction) {
+                        Button("Logout") {
+                            UserDefaults.standard.removeObject(forKey: AuthenticationModel.TOKEN)
+                            authModel.state = .unauthenticated
+                        }
+                    }
                 }
             }
         }
