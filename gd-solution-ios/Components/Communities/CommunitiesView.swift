@@ -28,7 +28,7 @@ struct CommunitiesView: View {
     let tournament: Tournament
     @ObservedObject var viewModel: CommunitiesViewModel
     
-    init(tournament: Tournament, dataService: CommunityDataService = CommunityDataService()) {
+    init(tournament: Tournament, dataService: CommunityDataServiceProtocol = CommunityDataService()) {
         self.tournament = tournament
         _viewModel = ObservedObject(wrappedValue: CommunitiesViewModel(dataService: dataService))
     }
@@ -57,7 +57,7 @@ struct CommunitiesView: View {
                 Label(error.localizedDescription, systemImage: "exclamationmark.triangle")
             }
         }
-        .navigationTitle(tournament.name)
+        .navigationTitle("Meine Gemeinschaften")
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
@@ -69,7 +69,7 @@ struct CommunitiesView: View {
 
 #Preview("Success") {
     NavigationStack {
-        CommunitiesView(tournament: .mock)
+        CommunitiesView(tournament: .mock, dataService: CommunityDataServiceMock())
     }
 }
 

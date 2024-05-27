@@ -87,7 +87,7 @@ class AuthenticationDataService: AuthenticationDataServiceProtocol {
             return Fail(error: error).eraseToAnyPublisher()
         }
         
-        return URLSession.shared.dataTaskPublisher(for: url)
+        return URLSession.shared.dataTaskPublisher(for: request)
             .validateResponse()
             .decode(type: AuthResponse.self, decoder: JSONCoder.decoder)
             .eraseToAnyPublisher()

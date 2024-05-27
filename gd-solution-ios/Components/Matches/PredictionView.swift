@@ -124,7 +124,6 @@ struct PredictionView: View {
                 return
             }
         }
-        .navigationTitle(String(describing: match.startAtFormatted))
         .navigationBarTitleDisplayMode(.inline)
     }
 }

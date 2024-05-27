@@ -129,9 +129,12 @@ struct TournamentDashboard: View {
             matchViewModel.fetchNextMatches()
         }
         .sheet(item: $selectedMatch) { match in
-            PredictionView(match: match, onUpsert: { matchId, prediction in
-                matchViewModel.upsertPredictionInStore(for: matchId, with: prediction)
-            })
+            NavigationStack {
+                PredictionView(match: match, onUpsert: { matchId, prediction in
+                    matchViewModel.upsertPredictionInStore(for: matchId, with: prediction)
+                })
+                .navigationTitle(match.prediction != nil ? "Wette bearbeiten" : "Wette abgeben")
+            }
             .presentationDetents([.medium])
         }
     }
