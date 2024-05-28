@@ -9,17 +9,33 @@ import SwiftUI
 
 struct LeaderBoardListEntry: View {
     let member: User
-    let index: Int
+    let position: Int
     
     var body: some View {
-        HStack(spacing: 16) {
-            Text("\(index + 1).")
+        HStack(spacing: 8) {
+            Text("\(position + 1).")
                 .font(.title2)
-                .foregroundStyle(index == 0 ? .yellow : index == 1 ? .gray : index == 2 ? .brown : .primary)
+                .foregroundStyle(position == 0 ? .yellow : position == 1 ? .gray : position == 2 ? .brown : .primary)
+            
+            if let supports = member.supports {
+                Circle()
+                    .frame(width: 20)
+                    .overlay {
+                        Image(supports.nameShort)
+                            .resizable()
+                            .scaledToFill()
+                    }
+                    .clipShape(Circle())
+            }
             
             VStack(alignment: .leading) {
-                Text(member.name)
-                    .font(.headline)
+                HStack {
+                    Text(member.name)
+                        .font(.headline)
+                    Text("@\(member.username)")
+                        .font(.footnote)
+                        .foregroundStyle(.secondary)
+                }
                 Text("Points: \(member.points)")
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
@@ -30,6 +46,6 @@ struct LeaderBoardListEntry: View {
 
 #Preview {
     List {
-        LeaderBoardListEntry(member: .mock, index: 0)
+        LeaderBoardListEntry(member: .mock, position: 0)
     }
 }

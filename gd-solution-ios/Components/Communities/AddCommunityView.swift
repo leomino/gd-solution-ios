@@ -74,6 +74,7 @@ struct AddCommunityView: View {
                 viewModel.createCommunity(.init(id: UUID(), name: name, tournament: tournament, members: []))
             }
             .disabled(name.isEmpty)
+            .buttonStyle(.borderedProminent)
         }
         .onChange(of: viewModel.state) {
             if case .success(let created) = viewModel.state {

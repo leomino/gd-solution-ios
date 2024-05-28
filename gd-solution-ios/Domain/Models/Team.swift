@@ -6,7 +6,7 @@
 //
 import Foundation
 
-struct Team: Identifiable, Codable, Equatable {
+struct Team: Identifiable, Codable, Equatable, Hashable {
     public let id: UUID
     public let name: String
     public let nameShort: String

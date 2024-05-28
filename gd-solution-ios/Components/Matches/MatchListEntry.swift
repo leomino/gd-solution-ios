@@ -20,18 +20,22 @@ struct MatchListEntry: View {
     var body: some View {
         HStack(spacing: 16) {
             HStack(spacing: 4) {
-                Image(match.homeTeam.nameShort)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 40, height: 40, alignment: .center)
-                    .background(.secondary)
+                Circle()
+                    .frame(width: 35)
+                    .overlay {
+                        Image(match.homeTeam.nameShort)
+                            .resizable()
+                            .scaledToFill()
+                    }
                     .clipShape(Circle())
                 
-                Image(match.awayTeam.nameShort)
-                    .resizable()
-                    .scaledToFill()
-                    .frame(width: 40, height: 40, alignment: .center)
-                    .background(.secondary)
+                Circle()
+                    .frame(width: 35)
+                    .overlay {
+                        Image(match.awayTeam.nameShort)
+                            .resizable()
+                            .scaledToFill()
+                    }
                     .clipShape(Circle())
             }
             VStack(alignment: .leading, spacing: 4) {

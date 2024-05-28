@@ -57,7 +57,7 @@ struct CommunitiesView: View {
                 List {
                     ForEach(communities) { community in
                         NavigationLink {
-                            LeaderBoardView(community: community)
+                            CommunityView(community: community)
                         } label: {
                             CommunityListEntry(community: community)
                         }

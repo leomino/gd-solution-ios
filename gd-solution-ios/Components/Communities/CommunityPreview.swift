@@ -13,20 +13,17 @@ struct CommunityPreview: View {
         VStack(alignment: .leading, spacing: 16) {
             HStack {
                 Text(community.name)
+                    .font(.headline)
                 Spacer()
                 Text("Punkte")
+                    .font(.subheadline)
             }
-            .font(.headline)
             ForEach(Array(community.members.sorted(by: { $0.points < $1.points }).enumerated()), id: \.offset) { position, member in
-                HStack(spacing: 4) {
-                    Text("\(position + 1).")
-                        .font(.title2)
-                        .foregroundStyle(position == 0 ? .yellow : position == 1 ? .gray : position == 2 ? .brown : .primary)
-                    Text(member.name)
+                HStack {
+                    LeaderBoardListEntry(member: member, position: position)
                     Spacer()
-                    Text("\(member.points)")
+                    Text(String(member.points))
                 }
-                .font(.subheadline)
             }
             .listRowSeparator(.hidden)
             

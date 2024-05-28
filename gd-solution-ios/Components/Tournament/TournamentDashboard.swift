@@ -102,7 +102,7 @@ struct TournamentDashboard: View {
                 case .success(let communities):
                     ForEach(communities) { community in
                         NavigationLink {
-                            LeaderBoardView(community: community)
+                            CommunityView(community: community)
                         } label: {
                             CommunityPreview(community: community)
                         }

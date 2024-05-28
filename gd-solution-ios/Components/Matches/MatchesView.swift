@@ -39,6 +39,7 @@ class MatchDayViewModel: LoadingStateModel<[MatchDay]> {
 
 struct MatchesView: View {
     @ObservedObject var viewModel: MatchDayViewModel
+    @State private var selectedMatch: Match? = nil
     
     init(dataService: MatchDayDataServiceProtocol = MatchDayDataService()) {
         _viewModel = ObservedObject(wrappedValue: MatchDayViewModel(dataService: dataService))
@@ -61,13 +62,10 @@ struct MatchesView: View {
                         ForEach(matchDays) { matchDay in
                             Section(matchDay.dateRangeFormatted) {
                                 ForEach(matchDay.matches) { match in
-                                    NavigationLink {
-                                        PredictionView(match: match, onUpsert: { matchId, prediction in
-                                            viewModel.upsertPredictionInStore(for: matchId, with: prediction)
-                                        })
-                                    } label: {
-                                        MatchListEntry(match: match)
-                                    }
+                                    MatchListEntry(match: match)
+                                        .onTapGesture {
+                                            selectedMatch = match
+                                        }
                                 }
                             }
                             .headerProminence(.increased)
@@ -80,6 +78,15 @@ struct MatchesView: View {
             .navigationTitle("Spiele")
             .refreshable {
                 viewModel.fetchMatches()
+            }
+            .sheet(item: $selectedMatch) { match in
+                NavigationStack {
+                    PredictionView(match: match, onUpsert: { matchId, prediction in
+                        viewModel.upsertPredictionInStore(for: matchId, with: prediction)
+                    })
+                    .navigationTitle(match.prediction != nil ? "Wette bearbeiten" : "Wette abgeben")
+                }
+                .presentationDetents([.medium])
             }
         }
     }

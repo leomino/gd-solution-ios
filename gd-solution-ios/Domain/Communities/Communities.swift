@@ -57,6 +57,7 @@ class CommunityDataServiceMock: CommunityDataServiceProtocol {
     func fetchAll() -> AnyPublisher<[Community], Error> {
         Just([.mock]).tryMap { $0 }.eraseToAnyPublisher()
     }
+    
     func createCommunity(community: Community) -> AnyPublisher<Community, Error> {
         Just(community).tryMap { $0 }.eraseToAnyPublisher()
     }

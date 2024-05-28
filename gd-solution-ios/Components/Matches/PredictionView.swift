@@ -110,6 +110,7 @@ struct PredictionView: View {
                 }
                 viewModel.upsertBy(matchId: match.id, homeTeamScore: homeTeamScore, awayTeamScore: awayTeamScore)
             }
+            .buttonStyle(.borderedProminent)
             .disabled(betInvalid)
         }
         .padding()
