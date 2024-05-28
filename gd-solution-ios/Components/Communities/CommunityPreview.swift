@@ -18,7 +18,7 @@ struct CommunityPreview: View {
                 Text("Punkte")
                     .font(.subheadline)
             }
-            ForEach(Array(community.members.sorted(by: { $0.points < $1.points }).enumerated()), id: \.offset) { position, member in
+            ForEach(Array(community.members.sorted(by: { $0.points > $1.points }).enumerated()), id: \.offset) { position, member in
                 HStack {
                     LeaderBoardListEntry(member: member, position: position)
                     Spacer()

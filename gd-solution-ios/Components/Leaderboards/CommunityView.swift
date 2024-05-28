@@ -110,17 +110,55 @@ struct InviteToCommunityView: View {
     }
 }
 
+import Combine
+class UserLocalSuggestionViewModel: ObservableObject {
+    @Published var filtered: [User]
+    @Published var userFilter = ""
+    public var cancellables = Set<AnyCancellable>()
+    
+    init(data: [User]) {
+        self.filtered = data
+        
+        $userFilter.debounce(for: .milliseconds(200), scheduler: DispatchQueue.main)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] filter in
+                guard let self else {
+                    return
+                }
+                guard !filter.isEmpty else {
+                    self.filtered = data
+                    return
+                }
+                self.filtered = data.filter {
+                    $0.username.lowercased().contains(filter.lowercased()) || $0.name.lowercased().contains(filter.lowercased())
+                }
+            }
+            .store(in: &cancellables)
+    }
+}
+
 struct CommunityView: View {
     @State private var community: Community
+    @ObservedObject private var userSuggestionViewModel: UserLocalSuggestionViewModel
     @State private var isInviteViewPresented = false
     
     init(community: Community) {
+        _userSuggestionViewModel = ObservedObject(wrappedValue: .init(data: community.members))
         _community = State(wrappedValue: community)
     }
     
     var body: some View {
-        List(Array(community.members.sorted(by: { $0.points < $1.points }).enumerated()), id: \.offset) { index, member in
-            LeaderBoardListEntry(member: member, position: index)
+        VStack {
+            TextField("Suche nach einem Mitglied", text: $userSuggestionViewModel.userFilter)
+                .autocorrectionDisabled()
+                .textInputAutocapitalization(.never)
+                .textFieldStyle(.roundedBorder)
+                .padding(.horizontal)
+            Spacer()
+            List(Array(userSuggestionViewModel.filtered.sorted(by: { $0.points < $1.points }).enumerated()), id: \.offset) { index, member in
+                LeaderBoardListEntry(member: member, position: index)
+            }
+            .listStyle(.plain)
         }
         .sheet(isPresented: $isInviteViewPresented) {
             NavigationStack {

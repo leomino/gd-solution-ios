@@ -61,32 +61,32 @@ struct PredictionView: View {
     
     var body: some View {
         VStack(spacing: 32) {
-            GeometryReader { geo in
-                HStack {
-                    VStack(spacing: 16) {
-                        Image(match.homeTeam.nameShort)
-                            .resizable()
-                            .scaledToFill()
-                            .clipShape(Circle())
-                            .frame(width: geo.size.width * 0.4)
-                        
-                        Text(match.homeTeam.name)
-                    }
-                    Spacer()
-                    Text("vs.")
-                    Spacer()
-                    VStack(spacing: 16) {
-                        Image(match.awayTeam.nameShort)
-                            .resizable()
-                            .scaledToFill()
-                            .clipShape(Circle())
-                            .frame(width: geo.size.width * 0.4)
-                        
-                        Text(match.awayTeam.name)
-                    }
+            HStack {
+                VStack(spacing: 16) {
+                    Circle()
+                        .overlay {
+                            Image(match.homeTeam.nameShort)
+                                .resizable()
+                                .scaledToFill()
+                        }
+                        .clipShape(Circle())
+                    
+                    Text(match.homeTeam.name)
                 }
-                .frame(width: geo.size.width)
-                .aspectRatio(contentMode: .fit)
+                Spacer()
+                Text("vs.")
+                Spacer()
+                VStack(spacing: 16) {
+                    Circle()
+                        .overlay {
+                            Image(match.awayTeam.nameShort)
+                                .resizable()
+                                .scaledToFill()
+                        }
+                        .clipShape(Circle())
+                    
+                    Text(match.awayTeam.name)
+                }
             }
             HStack(spacing: 16) {
                 TextField("Home Score", value: $homeTeamScore, format: .number, prompt: Text("0"))
