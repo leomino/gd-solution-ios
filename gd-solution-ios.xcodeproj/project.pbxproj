@@ -23,6 +23,7 @@
 		607925D02BF370C90077B6F8 /* MatchDays.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607925CF2BF370C90077B6F8 /* MatchDays.swift */; };
 		607925D22BF3758C0077B6F8 /* MatchDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607925D12BF3758C0077B6F8 /* MatchDay.swift */; };
 		60EACE592C0372660057540B /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE582C0372660057540B /* AuthenticationView.swift */; };
+		60EACE5B2C05DA380057540B /* AddCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE5A2C05DA380057540B /* AddCommunityView.swift */; };
 		60F6506B2BF55CB400330123 /* Prediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F6506A2BF55CB400330123 /* Prediction.swift */; };
 		60F6506D2BF5635E00330123 /* TournamentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F6506C2BF5635E00330123 /* TournamentsView.swift */; };
 		60F6506F2BF563C800330123 /* CommunitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F6506E2BF563C800330123 /* CommunitiesView.swift */; };
@@ -57,6 +58,7 @@
 		607925CF2BF370C90077B6F8 /* MatchDays.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchDays.swift; sourceTree = "<group>"; };
 		607925D12BF3758C0077B6F8 /* MatchDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchDay.swift; sourceTree = "<group>"; };
 		60EACE582C0372660057540B /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
+		60EACE5A2C05DA380057540B /* AddCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCommunityView.swift; sourceTree = "<group>"; };
 		60F6506A2BF55CB400330123 /* Prediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prediction.swift; sourceTree = "<group>"; };
 		60F6506C2BF5635E00330123 /* TournamentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TournamentsView.swift; sourceTree = "<group>"; };
 		60F6506E2BF563C800330123 /* CommunitiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitiesView.swift; sourceTree = "<group>"; };
@@ -204,6 +206,7 @@
 				60F650702BF5677E00330123 /* CommunityListEntry.swift */,
 				60F6506E2BF563C800330123 /* CommunitiesView.swift */,
 				60F6507A2BF6A6DC00330123 /* CommunityPreview.swift */,
+				60EACE5A2C05DA380057540B /* AddCommunityView.swift */,
 			);
 			path = Communities;
 			sourceTree = "<group>";
@@ -315,6 +318,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				60EACE5B2C05DA380057540B /* AddCommunityView.swift in Sources */,
 				60F6508C2C023BB900330123 /* Tournament.swift in Sources */,
 				607925CB2BF352080077B6F8 /* PredictionView.swift in Sources */,
 				607925AB2BE9622A0077B6F8 /* ContentView.swift in Sources */,

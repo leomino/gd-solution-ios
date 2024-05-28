@@ -22,11 +22,19 @@ class CommunitiesViewModel: LoadingStateModel<[Community]> {
     func fetchCommunities() {
         requests.send(dataService.fetchAll())
     }
+    
+    func insertCommunityInStore(community: Community) {
+        if case .success(var communities) = self.state {
+            communities.append(community)
+            self.state = .success(communities)
+        }
+    }
 }
 
 struct CommunitiesView: View {
     let tournament: Tournament
     @ObservedObject var viewModel: CommunitiesViewModel
+    @State private var isAddCommunityPresented = false
     
     init(tournament: Tournament, dataService: CommunityDataServiceProtocol = CommunityDataService()) {
         self.tournament = tournament
@@ -46,11 +54,13 @@ struct CommunitiesView: View {
             case .loading:
                 ProgressView()
             case .success(let communities):
-                List(communities) { community in
-                    NavigationLink {
-                        LeaderBoardView(community: community)
-                    } label: {
-                        CommunityListEntry(community: community)
+                List {
+                    ForEach(communities) { community in
+                        NavigationLink {
+                            LeaderBoardView(community: community)
+                        } label: {
+                            CommunityListEntry(community: community)
+                        }
                     }
                 }
             case .failure(let error):
@@ -61,8 +71,20 @@ struct CommunitiesView: View {
         .navigationBarTitleDisplayMode(.inline)
         .toolbar {
             ToolbarItem(placement: .primaryAction) {
-                Button("Add") {}
+                Button("Add") {
+                    isAddCommunityPresented = true
+                }
             }
+        }
+        .sheet(isPresented: $isAddCommunityPresented) {
+            NavigationStack {
+                AddCommunityView(for: tournament, onCreateSuccess: { community in
+                    viewModel.insertCommunityInStore(community: community)
+                })
+                .navigationTitle("Create Community")
+                .navigationBarTitleDisplayMode(.inline)
+            }
+            .presentationDetents([.medium])
         }
     }
 }
