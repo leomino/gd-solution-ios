@@ -25,6 +25,7 @@
 		60EACE592C0372660057540B /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE582C0372660057540B /* AuthenticationView.swift */; };
 		60EACE5B2C05DA380057540B /* AddCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE5A2C05DA380057540B /* AddCommunityView.swift */; };
 		60EACE5E2C05E76A0057540B /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE5D2C05E76A0057540B /* Users.swift */; };
+		60EACE602C0685600057540B /* InviteToCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE5F2C0685600057540B /* InviteToCommunityView.swift */; };
 		60F6506B2BF55CB400330123 /* Prediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F6506A2BF55CB400330123 /* Prediction.swift */; };
 		60F6506D2BF5635E00330123 /* TournamentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F6506C2BF5635E00330123 /* TournamentsView.swift */; };
 		60F6506F2BF563C800330123 /* CommunitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F6506E2BF563C800330123 /* CommunitiesView.swift */; };
@@ -61,6 +62,7 @@
 		60EACE582C0372660057540B /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		60EACE5A2C05DA380057540B /* AddCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCommunityView.swift; sourceTree = "<group>"; };
 		60EACE5D2C05E76A0057540B /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
+		60EACE5F2C0685600057540B /* InviteToCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteToCommunityView.swift; sourceTree = "<group>"; };
 		60F6506A2BF55CB400330123 /* Prediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prediction.swift; sourceTree = "<group>"; };
 		60F6506C2BF5635E00330123 /* TournamentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TournamentsView.swift; sourceTree = "<group>"; };
 		60F6506E2BF563C800330123 /* CommunitiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitiesView.swift; sourceTree = "<group>"; };
@@ -218,6 +220,7 @@
 				60F6506E2BF563C800330123 /* CommunitiesView.swift */,
 				60F6507A2BF6A6DC00330123 /* CommunityPreview.swift */,
 				60EACE5A2C05DA380057540B /* AddCommunityView.swift */,
+				60EACE5F2C0685600057540B /* InviteToCommunityView.swift */,
 			);
 			path = Communities;
 			sourceTree = "<group>";
@@ -342,6 +345,7 @@
 				60F650732BF56AF000330123 /* LeaderBoardListEntry.swift in Sources */,
 				607925A92BE9622A0077B6F8 /* gd_solution_iosApp.swift in Sources */,
 				607925D22BF3758C0077B6F8 /* MatchDay.swift in Sources */,
+				60EACE602C0685600057540B /* InviteToCommunityView.swift in Sources */,
 				60F6506F2BF563C800330123 /* CommunitiesView.swift in Sources */,
 				607925C42BF2ED230077B6F8 /* Team.swift in Sources */,
 				60F650832C01BD7700330123 /* Tournaments.swift in Sources */,
