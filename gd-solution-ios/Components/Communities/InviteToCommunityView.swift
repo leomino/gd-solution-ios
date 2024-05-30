@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class UserSuggestionViewModel: LoadingStateModel<[User]> {
+class UserSuggestionModel: LoadingStateModel<[User]> {
     let dataService: UsersDataServiceProtocol
     @Published var usernameFilter = ""
     
@@ -42,7 +42,7 @@ class UsersViewModel: LoadingStateModel<[User]> {
 
 struct InviteToCommunityView: View {
     @Environment(\.dismiss) var dismiss
-    @ObservedObject var suggestionViewModel: UserSuggestionViewModel
+    @ObservedObject var suggestionViewModel: UserSuggestionModel
     @ObservedObject var userViewModel: UsersViewModel
     @State private var userSelection = Set<String>()
     let communityId: Community.ID

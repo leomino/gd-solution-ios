@@ -51,6 +51,43 @@ class CommunityDataService: CommunityDataServiceProtocol {
             .decode(type: Community.self, decoder: JSONCoder.decoder)
             .eraseToAnyPublisher()
     }
+    
+    func searchBy(searchString: String) -> AnyPublisher<[Community], Error> {
+        guard let token = UserDefaults.standard.string(forKey: AuthenticationModel.TOKEN) else {
+            return Fail(error: URLError(.userAuthenticationRequired)).eraseToAnyPublisher()
+        }
+        guard let url = URL(string: "http://localhost:3000/api/communities/search?searchString=\(searchString)") else {
+            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
+        }
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .validateResponse()
+            .decode(type: [Community].self, decoder: JSONCoder.decoder)
+            .eraseToAnyPublisher()
+    }
+    
+    func joinCommunity(communityId: Community.ID) -> AnyPublisher<Community, Error> {
+        guard let token = UserDefaults.standard.string(forKey: AuthenticationModel.TOKEN) else {
+            return Fail(error: URLError(.userAuthenticationRequired)).eraseToAnyPublisher()
+        }
+        guard let url = URL(string: "http://localhost:3000/api/communities/join/\(communityId)") else {
+            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
+        }
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.setValue("application/json", forHTTPHeaderField: "Content-Type")
+        request.httpMethod = "POST"
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .validateResponse()
+            .decode(type: Community.self, decoder: JSONCoder.decoder)
+            .eraseToAnyPublisher()
+    }
 }
 
 class CommunityDataServiceMock: CommunityDataServiceProtocol {
@@ -58,12 +95,22 @@ class CommunityDataServiceMock: CommunityDataServiceProtocol {
         Just([.mock]).tryMap { $0 }.eraseToAnyPublisher()
     }
     
+    func searchBy(searchString: String) -> AnyPublisher<[Community], Error> {
+        Just([.mock]).tryMap { $0 }.eraseToAnyPublisher()
+    }
+    
     func createCommunity(community: Community) -> AnyPublisher<Community, Error> {
         Just(community).tryMap { $0 }.eraseToAnyPublisher()
+    }
+    
+    func joinCommunity(communityId: Community.ID) -> AnyPublisher<Community, Error> {
+        Just(.mock).tryMap { $0 }.eraseToAnyPublisher()
     }
 }
 
 protocol CommunityDataServiceProtocol {
     func fetchAll() -> AnyPublisher<[Community], Error>
+    func searchBy(searchString: String) -> AnyPublisher<[Community], Error>
     func createCommunity(community: Community) -> AnyPublisher<Community, Error>
+    func joinCommunity(communityId: Community.ID) -> AnyPublisher<Community, Error>
 }
