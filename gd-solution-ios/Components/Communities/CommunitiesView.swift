@@ -7,122 +7,9 @@
 
 import SwiftUI
 
-class CommunitiesViewModel: LoadingStateModel<[Community]> {
-    let dataService: CommunityDataServiceProtocol
-    init(dataService: CommunityDataServiceProtocol = CommunityDataService()) {
-        self.dataService = dataService
-        super.init(state: .idle)
-    }
-    
-    init(state: LoadingState<[Community]>, dataService: CommunityDataServiceProtocol) {
-        self.dataService = dataService
-        super.init(state: state)
-    }
-    
-    func fetchCommunities() {
-        requests.send(dataService.fetchAll())
-    }
-    
-    func insertCommunityInStore(community: Community) {
-        if case .success(var communities) = self.state {
-            communities.append(community)
-            self.state = .success(communities)
-        }
-    }
-}
-
-class CommunitySuggestionModel: LoadingStateModel<[Community]> {
-    let dataService: CommunityDataServiceProtocol
-    @Published var searchString = ""
-    
-    init(dataService: CommunityDataServiceProtocol = CommunityDataService()) {
-        self.dataService = dataService
-        super.init(state: .idle)
-        
-        $searchString.debounce(for: .milliseconds(200), scheduler: DispatchQueue.main)
-            .receive(on: DispatchQueue.main)
-            .sink { [weak self] searchString in
-                guard !searchString.isEmpty else {
-                    return
-                }
-                self?.requests.send(dataService.searchBy(searchString: searchString))
-            }
-            .store(in: &cancellables)
-    }
-}
-
-struct JoinCommunityView: View {
-    @Environment(\.dismiss) var dismiss
-    @ObservedObject var communityModel: CommunityViewModel
-    @ObservedObject var suggestionModel: CommunitySuggestionModel
-    @State private var selectedCommunityId: UUID?
-    let onJoinSuccess: (Community) -> Void
-    
-    init(dataService: CommunityDataServiceProtocol = CommunityDataService(), onJoinSuccess: @escaping (Community) -> Void) {
-        self.onJoinSuccess = onJoinSuccess
-        _suggestionModel = ObservedObject(wrappedValue: .init(dataService: dataService))
-        _communityModel = ObservedObject(wrappedValue: .init(dataService: dataService))
-    }
-    
-    var body: some View {
-        VStack {
-            TextField("Gruppe suchen", text: $suggestionModel.searchString)
-                .autocorrectionDisabled()
-                .textInputAutocapitalization(.never)
-                .textFieldStyle(.roundedBorder)
-            switch suggestionModel.state {
-            case .idle:
-                EmptyView()
-            case .loading:
-                ProgressView()
-            case .success(let suggestions):
-                List(suggestions, selection: $selectedCommunityId) { community in
-                    HStack {
-                        Text(community.name)
-                        Spacer()
-                        Text(community.tournament.name)
-                    }
-                }
-                .listStyle(.plain)
-                .environment(\.editMode, .constant(.active))
-            case .failure(let error):
-                Label(error.localizedDescription, systemImage: "exclamationmark.triangle")
-            }
-            Spacer()
-            switch suggestionModel.state {
-            case .loading:
-                ProgressView()
-            case .failure(let error):
-                Label(error.localizedDescription, systemImage: "exclamationmark.triangle")
-            default:
-                EmptyView()
-            }
-            Button("Beitreten") {
-                guard let selectedCommunityId else {
-                    return
-                }
-                communityModel.joinCommunity(communityId: selectedCommunityId)
-                
-            }
-            .disabled(selectedCommunityId == nil)
-            .buttonStyle(.borderedProminent)
-        }
-        .padding()
-    }
-}
-
-#Preview {
-    NavigationStack {
-        JoinCommunityView { _ in
-            
-        }
-        .navigationTitle("Gruppe beitreten")
-    }
-}
-
 struct CommunitiesView: View {
     let tournament: Tournament
-    @ObservedObject var viewModel: CommunitiesViewModel
+    @ObservedObject var viewModel: CommunitiesModel
     @ObservedObject var suggestionModel: CommunitySuggestionModel
     @State private var isCreateCommunityPresented = false
     @State private var isJoinCommunityPresented = false
@@ -130,12 +17,6 @@ struct CommunitiesView: View {
     init(tournament: Tournament, dataService: CommunityDataServiceProtocol = CommunityDataService()) {
         self.tournament = tournament
         _viewModel = ObservedObject(wrappedValue: .init(dataService: dataService))
-        _suggestionModel = ObservedObject(wrappedValue: .init(dataService: dataService))
-    }
-    
-    init(tournament: Tournament, state: LoadingState<[Community]>, dataService: CommunityDataServiceProtocol) {
-        self.tournament = tournament
-        _viewModel = ObservedObject(wrappedValue: .init(state: state, dataService: dataService))
         _suggestionModel = ObservedObject(wrappedValue: .init(dataService: dataService))
     }
     
@@ -152,7 +33,10 @@ struct CommunitiesView: View {
                         NavigationLink {
                             Text(community.name)
                         } label: {
-                            CommunityListEntry(community: community)
+                            HStack {
+                                Text(community.name)
+                                Spacer()
+                            }
                         }
                     }
                 }
@@ -164,6 +48,9 @@ struct CommunitiesView: View {
             if case .idle = viewModel.state {
                 viewModel.fetchCommunities()
             }
+        }
+        .refreshable {
+            viewModel.fetchCommunities()
         }
         .navigationTitle("Meine Gemeinschaften")
         .navigationBarTitleDisplayMode(.inline)
@@ -208,14 +95,14 @@ struct CommunitiesView: View {
     }
 }
 
-#Preview("Loading") {
-    NavigationStack {
-        CommunitiesView(tournament: .mock, state: .loading, dataService: CommunityDataServiceMock())
-    }
-}
-
-#Preview("Failure") {
-    NavigationStack {
-        CommunitiesView(tournament: .mock, state: .failure(NSError.notFound), dataService: CommunityDataServiceMock())
-    }
-}
+//#Preview("Loading") {
+//    NavigationStack {
+//        CommunitiesView(tournament: .mock, state: .loading, dataService: CommunityDataServiceMock())
+//    }
+//}
+//
+//#Preview("Failure") {
+//    NavigationStack {
+//        CommunitiesView(tournament: .mock, state: .failure(NSError.notFound), dataService: CommunityDataServiceMock())
+//    }
+//}

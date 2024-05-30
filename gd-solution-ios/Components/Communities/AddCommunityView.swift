@@ -7,29 +7,11 @@
 
 import SwiftUI
 
-class CommunityViewModel: LoadingStateModel<Community> {
-    let dataService: CommunityDataServiceProtocol
-    
-    init(state: LoadingState<Community> = .idle, dataService: CommunityDataServiceProtocol) {
-        self.dataService = dataService
-        super.init(state: state)
-    }
-    
-    func createCommunity(_ community: Community) {
-        requests.send(dataService.createCommunity(community: community))
-    }
-    
-    func joinCommunity(communityId: Community.ID) {
-        requests.send(dataService.joinCommunity(communityId: communityId))
-    }
-}
-
-
 struct AddCommunityView: View {
     @Environment(\.dismiss) var dismiss
     @State private var name = ""
     let tournament: Tournament
-    @ObservedObject var viewModel: CommunityViewModel
+    @ObservedObject var viewModel: CommunityModel
     let onCreateSuccess: (Community) -> Void
     
     init(

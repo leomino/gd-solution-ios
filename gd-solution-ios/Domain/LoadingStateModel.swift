@@ -29,27 +29,16 @@ public enum LoadingStateNotEquatable<T> {
     case idle, loading, success(T), failure(Error)
 }
 
-/// Manages the loading state for any `viewModel` depending on remote object fetching.
 class LoadingStateModelNE<T>: ObservableObject {
     @Published public var state: LoadingStateNotEquatable<T>
     public var requests = PassthroughSubject<AnyPublisher<T, Error>, Never>()
     public var cancellables = Set<AnyCancellable>()
 
-//    /// Initializes by synchronizing the loading state with an initial ongoing initial request.
-//    public init(publisher: AnyPublisher<T, Error>) {
-//        state = .idle
-//        setupRequestPublisher()
-//        requests.send(publisher)
-//    }
-
-    /// Initializes by setting the state to a predefined value.
-    /// If no value provided, the state is set to idle as there is nothing else to do.
     public init(state: LoadingStateNotEquatable<T>) {
         self.state = state
         setupRequestPublisher()
     }
 
-    /// Sets up the observation of all incoming requests.
     private func setupRequestPublisher() {
         requests
             .flatMap {
@@ -69,28 +58,16 @@ class LoadingStateModelNE<T>: ObservableObject {
     }
 }
 
-
-/// Manages the loading state for any `viewModel` depending on remote object fetching.
 class LoadingStateModel<T: Equatable>: ObservableObject {
     @Published public var state: LoadingState<T>
     public var requests = PassthroughSubject<AnyPublisher<T, Error>, Never>()
     public var cancellables = Set<AnyCancellable>()
 
-//    /// Initializes by synchronizing the loading state with an initial ongoing initial request.
-//    public init(publisher: AnyPublisher<T, Error>) {
-//        state = .idle
-//        setupRequestPublisher()
-//        requests.send(publisher)
-//    }
-
-    /// Initializes by setting the state to a predefined value.
-    /// If no value provided, the state is set to idle as there is nothing else to do.
-    public init(state: LoadingState<T>) {
+    public init(state: LoadingState<T> = .idle) {
         self.state = state
         setupRequestPublisher()
     }
 
-    /// Sets up the observation of all incoming requests.
     private func setupRequestPublisher() {
         requests
             .flatMap {

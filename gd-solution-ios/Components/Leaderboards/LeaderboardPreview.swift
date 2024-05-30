@@ -21,6 +21,8 @@ struct LeaderboardPreview: View {
             }
             ForEach(leaderboard.entries) { entry in
                 LeaderBoardListEntry(member: entry.user, position: entry.position)
+                    .font(.body)
+                    .fontWeight(.regular)
             }
         }
     }

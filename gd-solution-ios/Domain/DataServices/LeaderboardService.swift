@@ -90,7 +90,7 @@ class LeaderboardDataServiceMock: LeaderboardDataServiceProtocol {
     }
     
     func fetchPreviews() -> AnyPublisher<[Leaderboard], Error> {
-        Just([.mock]).tryMap { $0 }.eraseToAnyPublisher()
+        Just([.mock, .mock, .mock]).tryMap { $0 }.eraseToAnyPublisher()
     }
     
     func fetchEntries(

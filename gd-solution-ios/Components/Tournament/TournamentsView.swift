@@ -7,23 +7,11 @@
 
 import SwiftUI
 
-class TournamentsViewModel: LoadingStateModel<[Tournament]> {
-    let dataSercice: TournamentsDataServiceProtocol
-    init(dataSercice: TournamentsDataServiceProtocol = TournamentsDataService()) {
-        self.dataSercice = dataSercice
-        super.init(state: .idle)
-    }
-    
-    func fetchTournaments() {
-        requests.send(dataSercice.fetchAll())
-    }
-}
-
 struct TournamentsView: View {
-    @ObservedObject var viewModel: TournamentsViewModel
+    @ObservedObject var viewModel: TournamentsModel
     
     init(dataService: TournamentsDataServiceProtocol = TournamentsDataService()) {
-        _viewModel = ObservedObject(wrappedValue: TournamentsViewModel(dataSercice: dataService))
+        _viewModel = ObservedObject(wrappedValue: TournamentsModel(dataSercice: dataService))
     }
     
     var body: some View {

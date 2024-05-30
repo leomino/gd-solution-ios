@@ -7,61 +7,10 @@
 
 import SwiftUI
 
-class MatchesViewModel: LoadingStateModel<[Match]> {
-    let dataService: MatchDataServiceProtocol
-    init(dataService: MatchDataServiceProtocol = MatchDataService()) {
-        self.dataService = dataService
-        super.init(state: .idle)
-    }
-    
-    init(state: LoadingState<[Match]>, dataService: MatchDataServiceProtocol) {
-        self.dataService = dataService
-        super.init(state: state)
-    }
-    
-    func fetchAllMatches() {
-        requests.send(dataService.fetchAll())
-    }
-    
-    func fetchNextMatches() {
-        requests.send(dataService.fetchNext())
-    }
-    
-    func upsertPredictionInStore(for matchId: Match.ID, with prediction: Prediction) {
-        if case .success(var matches) = state {
-            if let index = matches.firstIndex(where: { $0.id == matchId }) {
-                matches[index].prediction = prediction
-            }
-            state = .success(matches)
-        }
-    }
-}
-
-class LeaderboardViewModel: LoadingStateModel<[Leaderboard]> {
-    let dataService: LeaderboardDataServiceProtocol
-    init(dataService: LeaderboardDataServiceProtocol = LeaderboardDataService()) {
-        self.dataService = dataService
-        super.init(state: .idle)
-    }
-    
-    init(state: LoadingState<[Leaderboard]>, dataService: LeaderboardDataServiceProtocol) {
-        self.dataService = dataService
-        super.init(state: state)
-    }
-    
-    func fetchAll() {
-        requests.send(dataService.fetchAll())
-    }
-    
-    func fetchPreviews() {
-        requests.send(dataService.fetchPreviews())
-    }
-}
-
 struct TournamentDashboard: View {
     let tournament: Tournament
     @ObservedObject var matchViewModel: MatchesViewModel
-    @ObservedObject var leaderboardViewModel: LeaderboardViewModel
+    @ObservedObject var leaderboardViewModel: LeaderboardModel
     @State private var selectedMatch: Match? = nil
     
     init(
@@ -77,7 +26,7 @@ struct TournamentDashboard: View {
     init(
         tournament: Tournament,
         matchesViewModel: MatchesViewModel,
-        leaderboardViewModel: LeaderboardViewModel = LeaderboardViewModel()
+        leaderboardViewModel: LeaderboardModel
     ) {
         self.tournament = tournament
         _matchViewModel = ObservedObject(wrappedValue: matchesViewModel)

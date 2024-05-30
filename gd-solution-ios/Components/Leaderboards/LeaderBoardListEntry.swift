@@ -21,7 +21,6 @@ struct LeaderBoardListEntry: View {
     var body: some View {
         HStack(spacing: 8) {
             Text("\(position).")
-                .font(.title2)
                 .foregroundStyle(position == 1 ? .yellow : position == 2 ? .gray : position == 3 ? .brown : .primary)
             
 //            if let supports = member.supports {
@@ -44,7 +43,7 @@ struct LeaderBoardListEntry: View {
                 Spacer()
                 Text(String(member.points))
             }
-            .fontWeight(member.username == currentUsername ? .bold : .medium)
+            .fontWeight(member.username == currentUsername ? .bold : .regular)
         }
     }
 }
