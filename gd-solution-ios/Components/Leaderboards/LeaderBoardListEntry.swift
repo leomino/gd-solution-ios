@@ -13,9 +13,9 @@ struct LeaderBoardListEntry: View {
     
     var body: some View {
         HStack(spacing: 8) {
-            Text("\(position + 1).")
+            Text("\(position).")
                 .font(.title2)
-                .foregroundStyle(position == 0 ? .yellow : position == 1 ? .gray : position == 2 ? .brown : .primary)
+                .foregroundStyle(position == 1 ? .yellow : position == 2 ? .gray : position == 3 ? .brown : .primary)
             
             if let supports = member.supports {
                 Circle()
@@ -28,17 +28,14 @@ struct LeaderBoardListEntry: View {
                     .clipShape(Circle())
             }
             
-            VStack(alignment: .leading) {
-                HStack {
-                    Text(member.name)
-                        .font(.headline)
-                    Text("@\(member.username)")
-                        .font(.footnote)
-                        .foregroundStyle(.secondary)
-                }
-                Text("Points: \(member.points)")
-                    .font(.subheadline)
+            HStack {
+                Text(member.name)
+                    .font(.headline)
+                Text("@\(member.username)")
+                    .font(.footnote)
                     .foregroundStyle(.secondary)
+                Spacer()
+                Text(String(member.points))
             }
         }
     }
@@ -46,6 +43,9 @@ struct LeaderBoardListEntry: View {
 
 #Preview {
     List {
-        LeaderBoardListEntry(member: .mock, position: 0)
+        LeaderBoardListEntry(member: .mock, position: 1)
+        LeaderBoardListEntry(member: .mock, position: 2)
+        LeaderBoardListEntry(member: .mock, position: 3)
+        LeaderBoardListEntry(member: .mock, position: 4)
     }
 }

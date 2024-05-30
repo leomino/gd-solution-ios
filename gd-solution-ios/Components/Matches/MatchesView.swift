@@ -11,7 +11,7 @@ class MatchDayViewModel: LoadingStateModel<[MatchDay]> {
     let dataService: MatchDayDataServiceProtocol
     init(dataService: MatchDayDataServiceProtocol = MatchDayDataService()) {
         self.dataService = dataService
-        super.init(publisher: dataService.fetchAll())
+        super.init(state: .idle)
     }
     
     init(state: LoadingState<[MatchDay]>, dataService: MatchDayDataServiceProtocol) {
@@ -76,6 +76,11 @@ struct MatchesView: View {
                 }
             }
             .navigationTitle("Spiele")
+            .onAppear {
+                if case .idle = viewModel.state {
+                    viewModel.fetchMatches()
+                }
+            }
             .refreshable {
                 viewModel.fetchMatches()
             }

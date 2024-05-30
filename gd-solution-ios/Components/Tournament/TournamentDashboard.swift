@@ -11,7 +11,7 @@ class MatchesViewModel: LoadingStateModel<[Match]> {
     let dataService: MatchDataServiceProtocol
     init(dataService: MatchDataServiceProtocol = MatchDataService()) {
         self.dataService = dataService
-        super.init(publisher: dataService.fetchNext())
+        super.init(state: .idle)
     }
     
     init(state: LoadingState<[Match]>, dataService: MatchDataServiceProtocol) {
@@ -37,30 +37,51 @@ class MatchesViewModel: LoadingStateModel<[Match]> {
     }
 }
 
+class LeaderboardViewModel: LoadingStateModel<[Leaderboard]> {
+    let dataService: LeaderboardDataServiceProtocol
+    init(dataService: LeaderboardDataServiceProtocol = LeaderboardDataService()) {
+        self.dataService = dataService
+        super.init(state: .idle)
+    }
+    
+    init(state: LoadingState<[Leaderboard]>, dataService: LeaderboardDataServiceProtocol) {
+        self.dataService = dataService
+        super.init(state: state)
+    }
+    
+    func fetchAll() {
+        requests.send(dataService.fetchAll())
+    }
+    
+    func fetchPreviews() {
+        requests.send(dataService.fetchPreviews())
+    }
+}
+
 struct TournamentDashboard: View {
     let tournament: Tournament
-    @ObservedObject var matchViewModel = MatchesViewModel()
-    @ObservedObject var communityViewModel = CommunitiesViewModel()
+    @ObservedObject var matchViewModel: MatchesViewModel
+    @ObservedObject var leaderboardViewModel: LeaderboardViewModel
     @State private var selectedMatch: Match? = nil
     
     init(
         tournament: Tournament,
-        communityDataService: CommunityDataServiceProtocol = CommunityDataService(),
-        matchDataService: MatchDataServiceProtocol = MatchDataService()
+        matchDataService: MatchDataServiceProtocol = MatchDataService(),
+        leaderboardDataService: LeaderboardDataServiceProtocol = LeaderboardDataService()
     ) {
         self.tournament = tournament
-        _communityViewModel = ObservedObject(wrappedValue: CommunitiesViewModel(dataService: communityDataService))
-        _matchViewModel = ObservedObject(wrappedValue: MatchesViewModel(dataService: matchDataService))
+        _matchViewModel = ObservedObject(wrappedValue: .init(dataService: matchDataService))
+        _leaderboardViewModel = ObservedObject(wrappedValue: .init(dataService: leaderboardDataService))
     }
     
     init(
         tournament: Tournament,
-        communitiesViewModel: CommunitiesViewModel,
-        matchesViewModel: MatchesViewModel
+        matchesViewModel: MatchesViewModel,
+        leaderboardViewModel: LeaderboardViewModel = LeaderboardViewModel()
     ) {
         self.tournament = tournament
-        _communityViewModel = ObservedObject(wrappedValue: communitiesViewModel)
         _matchViewModel = ObservedObject(wrappedValue: matchesViewModel)
+        _leaderboardViewModel = ObservedObject(wrappedValue: leaderboardViewModel)
     }
     
     var body: some View {
@@ -94,17 +115,18 @@ struct TournamentDashboard: View {
             }
             .headerProminence(.increased)
             Section {
-                switch communityViewModel.state {
+                switch leaderboardViewModel.state {
                 case .idle:
                     EmptyView()
                 case .loading:
                     ProgressView()
-                case .success(let communities):
-                    ForEach(communities) { community in
+                case .success(let leaderboards):
+                    ForEach(leaderboards) { leaderboard in
                         NavigationLink {
-                            CommunityView(community: community)
+                            LeaderboardView(leaderboard: leaderboard)
+                                .navigationTitle(leaderboard.community.name)
                         } label: {
-                            CommunityPreview(community: community)
+                            LeaderboardPreview(leaderboard: leaderboard)
                         }
                     }
                 case .failure(let error):
@@ -124,8 +146,16 @@ struct TournamentDashboard: View {
             .headerProminence(.increased)
         }
         .navigationTitle(tournament.name)
+        .onAppear {
+            if case .idle = matchViewModel.state {
+                matchViewModel.fetchNextMatches()
+            }
+            if case .idle = leaderboardViewModel.state {
+                leaderboardViewModel.fetchPreviews()
+            }
+        }
         .refreshable {
-            communityViewModel.fetchCommunities()
+            leaderboardViewModel.fetchPreviews()
             matchViewModel.fetchNextMatches()
         }
         .sheet(item: $selectedMatch) { match in
@@ -144,8 +174,8 @@ struct TournamentDashboard: View {
     NavigationStack {
         TournamentDashboard(
             tournament: .mock,
-            communityDataService: CommunityDataServiceMock(),
-            matchDataService: MatchDataServiceMock()
+            matchDataService: MatchDataServiceMock(),
+            leaderboardDataService: LeaderboardDataServiceMock()
         )
     }
 }
@@ -154,8 +184,8 @@ struct TournamentDashboard: View {
     NavigationStack {
         TournamentDashboard(
             tournament: .mock,
-            communitiesViewModel: .init(state: .loading, dataService: CommunityDataServiceMock()),
-            matchesViewModel: .init(state: .loading, dataService: MatchDataServiceMock())
+            matchesViewModel: .init(state: .loading, dataService: MatchDataServiceMock()),
+            leaderboardViewModel: .init(state: .loading, dataService: LeaderboardDataServiceMock())
         )
     }
 }
@@ -164,8 +194,8 @@ struct TournamentDashboard: View {
     NavigationStack {
         TournamentDashboard(
             tournament: .mock,
-            communitiesViewModel: .init(state: .failure(NSError.notFound), dataService: CommunityDataServiceMock()),
-            matchesViewModel: .init(state: .failure(NSError.notFound), dataService: MatchDataServiceMock())
+            matchesViewModel: .init(state: .failure(NSError.notFound), dataService: MatchDataServiceMock()),
+            leaderboardViewModel: .init(state: .failure(NSError.notFound), dataService: LeaderboardDataServiceMock())
         )
     }
 }

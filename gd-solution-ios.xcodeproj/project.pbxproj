@@ -26,13 +26,15 @@
 		60EACE5B2C05DA380057540B /* AddCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE5A2C05DA380057540B /* AddCommunityView.swift */; };
 		60EACE5E2C05E76A0057540B /* Users.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE5D2C05E76A0057540B /* Users.swift */; };
 		60EACE602C0685600057540B /* InviteToCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE5F2C0685600057540B /* InviteToCommunityView.swift */; };
+		60EACE632C087D690057540B /* Leaderboards.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE622C087D690057540B /* Leaderboards.swift */; };
+		60EACE652C087D8B0057540B /* Leaderboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE642C087D8B0057540B /* Leaderboard.swift */; };
+		60EACE672C0896EA0057540B /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE662C0896EA0057540B /* LeaderboardView.swift */; };
 		60F6506B2BF55CB400330123 /* Prediction.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F6506A2BF55CB400330123 /* Prediction.swift */; };
 		60F6506D2BF5635E00330123 /* TournamentsView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F6506C2BF5635E00330123 /* TournamentsView.swift */; };
 		60F6506F2BF563C800330123 /* CommunitiesView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F6506E2BF563C800330123 /* CommunitiesView.swift */; };
 		60F650712BF5677E00330123 /* CommunityListEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F650702BF5677E00330123 /* CommunityListEntry.swift */; };
 		60F650732BF56AF000330123 /* LeaderBoardListEntry.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F650722BF56AF000330123 /* LeaderBoardListEntry.swift */; };
-		60F650752BF56B0500330123 /* CommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F650742BF56B0500330123 /* CommunityView.swift */; };
-		60F6507B2BF6A6DC00330123 /* CommunityPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F6507A2BF6A6DC00330123 /* CommunityPreview.swift */; };
+		60F6507B2BF6A6DC00330123 /* LeaderboardPreview.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F6507A2BF6A6DC00330123 /* LeaderboardPreview.swift */; };
 		60F650802C0125BD00330123 /* TournamentDashboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F6507F2C0125BD00330123 /* TournamentDashboard.swift */; };
 		60F650832C01BD7700330123 /* Tournaments.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F650822C01BD7700330123 /* Tournaments.swift */; };
 		60F650862C01BFEE00330123 /* Communities.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60F650852C01BFEE00330123 /* Communities.swift */; };
@@ -63,13 +65,15 @@
 		60EACE5A2C05DA380057540B /* AddCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCommunityView.swift; sourceTree = "<group>"; };
 		60EACE5D2C05E76A0057540B /* Users.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Users.swift; sourceTree = "<group>"; };
 		60EACE5F2C0685600057540B /* InviteToCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = InviteToCommunityView.swift; sourceTree = "<group>"; };
+		60EACE622C087D690057540B /* Leaderboards.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Leaderboards.swift; sourceTree = "<group>"; };
+		60EACE642C087D8B0057540B /* Leaderboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Leaderboard.swift; sourceTree = "<group>"; };
+		60EACE662C0896EA0057540B /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
 		60F6506A2BF55CB400330123 /* Prediction.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Prediction.swift; sourceTree = "<group>"; };
 		60F6506C2BF5635E00330123 /* TournamentsView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TournamentsView.swift; sourceTree = "<group>"; };
 		60F6506E2BF563C800330123 /* CommunitiesView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunitiesView.swift; sourceTree = "<group>"; };
 		60F650702BF5677E00330123 /* CommunityListEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityListEntry.swift; sourceTree = "<group>"; };
 		60F650722BF56AF000330123 /* LeaderBoardListEntry.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderBoardListEntry.swift; sourceTree = "<group>"; };
-		60F650742BF56B0500330123 /* CommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityView.swift; sourceTree = "<group>"; };
-		60F6507A2BF6A6DC00330123 /* CommunityPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CommunityPreview.swift; sourceTree = "<group>"; };
+		60F6507A2BF6A6DC00330123 /* LeaderboardPreview.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardPreview.swift; sourceTree = "<group>"; };
 		60F6507F2C0125BD00330123 /* TournamentDashboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TournamentDashboard.swift; sourceTree = "<group>"; };
 		60F650822C01BD7700330123 /* Tournaments.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Tournaments.swift; sourceTree = "<group>"; };
 		60F650852C01BFEE00330123 /* Communities.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Communities.swift; sourceTree = "<group>"; };
@@ -130,6 +134,7 @@
 		607925B62BF0E90E0077B6F8 /* Domain */ = {
 			isa = PBXGroup;
 			children = (
+				60EACE612C087D5E0057540B /* Leaderboards */,
 				60EACE5C2C05E7560057540B /* Users */,
 				60F6508D2C023C0D00330123 /* Predictions */,
 				60F650842C01BFE100330123 /* Communities */,
@@ -162,6 +167,7 @@
 				60F650872C023B9E00330123 /* User.swift */,
 				60F650892C023BA800330123 /* Community.swift */,
 				60F6508B2C023BB900330123 /* Tournament.swift */,
+				60EACE642C087D8B0057540B /* Leaderboard.swift */,
 			);
 			path = Models;
 			sourceTree = "<group>";
@@ -194,11 +200,20 @@
 			path = Users;
 			sourceTree = "<group>";
 		};
+		60EACE612C087D5E0057540B /* Leaderboards */ = {
+			isa = PBXGroup;
+			children = (
+				60EACE622C087D690057540B /* Leaderboards.swift */,
+			);
+			path = Leaderboards;
+			sourceTree = "<group>";
+		};
 		60F650762BF6A2F000330123 /* Leaderboards */ = {
 			isa = PBXGroup;
 			children = (
+				60F6507A2BF6A6DC00330123 /* LeaderboardPreview.swift */,
 				60F650722BF56AF000330123 /* LeaderBoardListEntry.swift */,
-				60F650742BF56B0500330123 /* CommunityView.swift */,
+				60EACE662C0896EA0057540B /* LeaderboardView.swift */,
 			);
 			path = Leaderboards;
 			sourceTree = "<group>";
@@ -218,7 +233,6 @@
 			children = (
 				60F650702BF5677E00330123 /* CommunityListEntry.swift */,
 				60F6506E2BF563C800330123 /* CommunitiesView.swift */,
-				60F6507A2BF6A6DC00330123 /* CommunityPreview.swift */,
 				60EACE5A2C05DA380057540B /* AddCommunityView.swift */,
 				60EACE5F2C0685600057540B /* InviteToCommunityView.swift */,
 			);
@@ -333,12 +347,14 @@
 			buildActionMask = 2147483647;
 			files = (
 				60EACE5B2C05DA380057540B /* AddCommunityView.swift in Sources */,
+				60EACE652C087D8B0057540B /* Leaderboard.swift in Sources */,
 				60F6508C2C023BB900330123 /* Tournament.swift in Sources */,
 				607925CB2BF352080077B6F8 /* PredictionView.swift in Sources */,
 				607925AB2BE9622A0077B6F8 /* ContentView.swift in Sources */,
 				607925CD2BF3524F0077B6F8 /* MatchListEntry.swift in Sources */,
 				607925B82BF0E91C0077B6F8 /* JSONCoder.swift in Sources */,
-				60F6507B2BF6A6DC00330123 /* CommunityPreview.swift in Sources */,
+				60EACE672C0896EA0057540B /* LeaderboardView.swift in Sources */,
+				60F6507B2BF6A6DC00330123 /* LeaderboardPreview.swift in Sources */,
 				607925D02BF370C90077B6F8 /* MatchDays.swift in Sources */,
 				60EACE592C0372660057540B /* AuthenticationView.swift in Sources */,
 				607925BA2BF0E9500077B6F8 /* LoadingStateModel.swift in Sources */,
@@ -350,9 +366,9 @@
 				607925C42BF2ED230077B6F8 /* Team.swift in Sources */,
 				60F650832C01BD7700330123 /* Tournaments.swift in Sources */,
 				607925C92BF351DD0077B6F8 /* MatchesView.swift in Sources */,
-				60F650752BF56B0500330123 /* CommunityView.swift in Sources */,
 				60F6508A2C023BA800330123 /* Community.swift in Sources */,
 				60F650712BF5677E00330123 /* CommunityListEntry.swift in Sources */,
+				60EACE632C087D690057540B /* Leaderboards.swift in Sources */,
 				60F650862C01BFEE00330123 /* Communities.swift in Sources */,
 				607925BF2BF0E98F0077B6F8 /* Matches.swift in Sources */,
 				60EACE5E2C05E76A0057540B /* Users.swift in Sources */,

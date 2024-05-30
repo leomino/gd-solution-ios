@@ -7,13 +7,21 @@
 
 import Foundation
 
+struct MatchResult: Codable, Equatable {
+    var homeTeamScore: Int
+    var awayTeamScore: Int
+    var finalized: Bool
+    
+    static var mock: MatchResult {
+        .init(homeTeamScore: 0, awayTeamScore: 0, finalized: false)
+    }
+}
+
 struct Match: Identifiable, Codable, Equatable {
     public let id: UUID
     public let homeTeam: Team
     public let awayTeam: Team
-    public let homeTeamScore: Int?
-    public let awayTeamScore: Int?
-    public let winnerTeam: Team?
+    public var result: MatchResult
     public var prediction: Prediction?
     public let startAt: Date
         
@@ -41,31 +49,31 @@ struct Match: Identifiable, Codable, Equatable {
     }
     
     static var mock: Match {
-        .init(id: UUID(), homeTeam: .mock, awayTeam: .mock, homeTeamScore: nil, awayTeamScore: nil, winnerTeam: nil, prediction: .mock, startAt: .distantPast)
+        .init(id: UUID(), homeTeam: .mock, awayTeam: .mock, result: .mock, prediction: .mock, startAt: .distantPast)
     }
     
     static var mockPlayingNextWeek: Match {
-        return .init(id: UUID(), homeTeam: .mock, awayTeam: .mock, homeTeamScore: 0, awayTeamScore: 1, winnerTeam: nil, prediction: .mock, startAt: .init(timeIntervalSinceNow: 691_200))
+        return .init(id: UUID(), homeTeam: .mock, awayTeam: .mock, result: .mock, prediction: .mock, startAt: .init(timeIntervalSinceNow: 691_200))
     }
     
     static var mockPlayingThisWeek: Match {
-        return .init(id: UUID(), homeTeam: .mock, awayTeam: .mock, homeTeamScore: 0, awayTeamScore: 1, winnerTeam: nil, prediction: .mock, startAt: .init(timeIntervalSinceNow: 86_400))
+        return .init(id: UUID(), homeTeam: .mock, awayTeam: .mock, result: .mock, prediction: .mock, startAt: .init(timeIntervalSinceNow: 86_400))
     }
     
     static var mockPlayingToday: Match {
-        return .init(id: UUID(), homeTeam: .mock, awayTeam: .mock, homeTeamScore: 0, awayTeamScore: 1, winnerTeam: nil, prediction: .mock, startAt: .init(timeIntervalSinceNow: 28_800))
+        return .init(id: UUID(), homeTeam: .mock, awayTeam: .mock, result: .mock, prediction: .mock, startAt: .init(timeIntervalSinceNow: 28_800))
     }
     
     static var mockPlayingInMinutes: Match {
-        return .init(id: UUID(), homeTeam: .mock, awayTeam: .mock, homeTeamScore: 0, awayTeamScore: 1, winnerTeam: nil, prediction: .mock, startAt: .init(timeIntervalSinceNow: 900))
+        return .init(id: UUID(), homeTeam: .mock, awayTeam: .mock, result: .mock, prediction: .mock, startAt: .init(timeIntervalSinceNow: 900))
     }
     
     static var mockCurrentlyPlaying: Match {
-        return .init(id: UUID(), homeTeam: .mock, awayTeam: .mock, homeTeamScore: 0, awayTeamScore: 1, winnerTeam: nil, prediction: .mock, startAt: .init(timeIntervalSinceNow: -900))
+        return .init(id: UUID(), homeTeam: .mock, awayTeam: .mock, result: .mock, prediction: .mock, startAt: .init(timeIntervalSinceNow: -900))
     }
     
     static var mockOver: Match {
-        return .init(id: UUID(), homeTeam: .mock, awayTeam: .mock, homeTeamScore: 0, awayTeamScore: 1, winnerTeam: .mock, prediction: .mock, startAt: .distantPast)
+        return .init(id: UUID(), homeTeam: .mock, awayTeam: .mock, result: .mock, prediction: .mock, startAt: .distantPast)
     }
 }
 

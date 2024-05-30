@@ -71,7 +71,9 @@ struct AddCommunityView: View {
                 EmptyView()
             }
             Button("Gemeinschaft erstellen") {
-                viewModel.createCommunity(.init(id: UUID(), name: name, tournament: tournament, members: []))
+                viewModel.createCommunity(
+                    .init(id: UUID(), name: name, tournament: tournament)
+                )
             }
             .disabled(name.isEmpty)
             .buttonStyle(.borderedProminent)

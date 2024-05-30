@@ -11,7 +11,7 @@ class CommunitiesViewModel: LoadingStateModel<[Community]> {
     let dataService: CommunityDataServiceProtocol
     init(dataService: CommunityDataServiceProtocol = CommunityDataService()) {
         self.dataService = dataService
-        super.init(publisher: dataService.fetchAll())
+        super.init(state: .idle)
     }
     
     init(state: LoadingState<[Community]>, dataService: CommunityDataServiceProtocol) {
@@ -57,7 +57,7 @@ struct CommunitiesView: View {
                 List {
                     ForEach(communities) { community in
                         NavigationLink {
-                            CommunityView(community: community)
+                            Text(community.name)
                         } label: {
                             CommunityListEntry(community: community)
                         }
@@ -65,6 +65,11 @@ struct CommunitiesView: View {
                 }
             case .failure(let error):
                 Label(error.localizedDescription, systemImage: "exclamationmark.triangle")
+            }
+        }
+        .onAppear {
+            if case .idle = viewModel.state {
+                viewModel.fetchCommunities()
             }
         }
         .navigationTitle("Meine Gemeinschaften")

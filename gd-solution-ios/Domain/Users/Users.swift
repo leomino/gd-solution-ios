@@ -58,6 +58,24 @@ class UsersDataService: UsersDataServiceProtocol {
             .decode(type: [User].self, decoder: JSONCoder.decoder)
             .eraseToAnyPublisher()
     }
+    
+    func pinUser(in communityId: Community.ID, usernameToPin: User.ID) -> AnyPublisher<[User.ID], Error> {
+        guard let token = UserDefaults.standard.string(forKey: AuthenticationModel.TOKEN) else {
+            return Fail(error: URLError(.userAuthenticationRequired)).eraseToAnyPublisher()
+        }
+        guard let url = URL(string: "http://localhost:3000/api/communities/\(communityId)/pinned?username=\(usernameToPin)") else {
+            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
+        }
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = "POST"
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .validateResponse()
+            .decode(type: [User.ID].self, decoder: JSONCoder.decoder)
+            .eraseToAnyPublisher()
+    }
 }
 
 class UsersDataServiceMock: UsersDataServiceProtocol {
@@ -72,10 +90,15 @@ class UsersDataServiceMock: UsersDataServiceProtocol {
     func inviteToCommunity(communityId: Community.ID, userIds: [User.ID]) -> AnyPublisher<[User], Error> {
         Just([.mock]).tryMap { $0 }.eraseToAnyPublisher()
     }
+    
+    func pinUser(in communityId: Community.ID, usernameToPin: User.ID) -> AnyPublisher<[User.ID], Error> {
+        Just([User.mock.id]).tryMap { $0 }.eraseToAnyPublisher()
+    }
 }
 
 protocol UsersDataServiceProtocol {
     func fetchAll() -> AnyPublisher<[User], Error>
     func fetchBy(usernameFilter: String) -> AnyPublisher<[User], Error>
     func inviteToCommunity(communityId: Community.ID, userIds: [User.ID]) -> AnyPublisher<[User], Error>
+    func pinUser(in communityId: Community.ID, usernameToPin: User.ID) -> AnyPublisher<[User.ID], Error>
 }

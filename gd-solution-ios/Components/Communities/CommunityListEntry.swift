@@ -14,17 +14,17 @@ struct CommunityListEntry: View {
             VStack(alignment: .leading) {
                 Text(community.name)
                     .font(.headline)
-                Text(community.members.map(\.name).joined(separator: ", "))
-                    .lineLimit(1)
-                    .truncationMode(.tail)
-                    .font(.subheadline)
-                    .foregroundStyle(.secondary)
+//                Text(community.members.map(\.name).joined(separator: ", "))
+//                    .lineLimit(1)
+//                    .truncationMode(.tail)
+//                    .font(.subheadline)
+//                    .foregroundStyle(.secondary)
             }
             Spacer()
-            let totalPoints = community.members.map(\.points).reduce(0, +)
-            Text("Total points: \(totalPoints)")
-                .font(.subheadline)
-                .foregroundStyle(.orange)
+//            let totalPoints = community.members.map(\.points).reduce(0, +)
+//            Text("Total points: \(totalPoints)")
+//                .font(.subheadline)
+//                .foregroundStyle(.orange)
         }
     }
 }

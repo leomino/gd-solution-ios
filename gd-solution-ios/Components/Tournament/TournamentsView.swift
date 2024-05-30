@@ -11,7 +11,7 @@ class TournamentsViewModel: LoadingStateModel<[Tournament]> {
     let dataSercice: TournamentsDataServiceProtocol
     init(dataSercice: TournamentsDataServiceProtocol = TournamentsDataService()) {
         self.dataSercice = dataSercice
-        super.init(publisher: dataSercice.fetchAll())
+        super.init(state: .idle)
     }
     
     func fetchTournaments() {
@@ -57,6 +57,11 @@ struct TournamentsView: View {
             }
         }
         .navigationTitle("Tournaments")
+        .onAppear {
+            if case .idle = viewModel.state {
+                viewModel.fetchTournaments()
+            }
+        }
         .refreshable {
             viewModel.fetchTournaments()
         }
