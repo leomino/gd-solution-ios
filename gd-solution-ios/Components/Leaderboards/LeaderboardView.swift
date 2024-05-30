@@ -7,7 +7,7 @@
 
 import SwiftUI
 
-class LeaderboardEntryViewModel: LoadingStateModelNE<([LeaderboardEntry], LeaderboardEntryViewModel.RequestType, Int)> {
+class LeaderboardPaginationModel: LoadingStateModelNE<([LeaderboardEntry], LeaderboardPaginationModel.RequestType, Int)> {
     enum RequestType {
         case previous, next
     }
@@ -65,54 +65,110 @@ class LeaderboardEntryViewModel: LoadingStateModelNE<([LeaderboardEntry], Leader
     }
     
     func fetchEntries(offset: Int, limit: Int, type: RequestType, at: Int) {
-        requests.send(dataService.fetchLeaderboardEntries(for: leaderboard.community.id, offset: offset, limit: limit, type: type, at: at))
+        requests.send(dataService.fetchEntries(in: leaderboard.community.id, offset: offset, limit: limit, type: type, at: at))
     }
 }
 
+class LeaderboardSuggestionModel: LoadingStateModel<[LeaderboardEntry]> {
+    let community: Community
+    let dataService: LeaderboardDataServiceProtocol
+    @Published var usernameFilter = ""
+    
+    init(community: Community, dataService: LeaderboardDataServiceProtocol) {
+        self.dataService = dataService
+        self.community = community
+        super.init(state: .idle)
+        
+        $usernameFilter.debounce(for: .milliseconds(200), scheduler: DispatchQueue.main)
+            .receive(on: DispatchQueue.main)
+            .sink { [weak self] searchString in
+                guard !searchString.isEmpty else {
+                    return
+                }
+                self?.requests.send(dataService.fetchEntries(in: community.id, with: searchString))
+            }
+            .store(in: &cancellables)
+    }
+}
+
+
 struct LeaderboardView: View {
-    let currentUsername = "leokeo123"
-    @ObservedObject private var viewModel: LeaderboardEntryViewModel
+    @ObservedObject private var paginationModel: LeaderboardPaginationModel
+    @ObservedObject private var suggestionModel: LeaderboardSuggestionModel
     
     init(leaderboard: Leaderboard, dataService: LeaderboardDataServiceProtocol = LeaderboardDataService()) {
-        _viewModel = ObservedObject(wrappedValue: .init(leaderboard: leaderboard, dataService: dataService))
+        _paginationModel = ObservedObject(wrappedValue: .init(leaderboard: leaderboard, dataService: dataService))
+        _suggestionModel = ObservedObject(wrappedValue: .init(community: leaderboard.community, dataService: dataService))
     }
     
     var body: some View {
         ScrollView {
-            VStack(spacing: 16) {
-                ForEach(Array(viewModel.splittedEntries.enumerated()), id: \.offset) { index, entries in
-                    if index >= 1 {
-                        Button {
-                            let offset = max(entries.first!.position - 11, viewModel.splittedEntries[index - 1].last!.position)
-                            let limit = min(entries.first!.position - offset - 1, 10)
-                            viewModel.fetchEntries(offset: offset, limit: limit, type: .previous, at: index)
-                        } label: {
-                            Image(systemName: "chevron.up")
+            if suggestionModel.usernameFilter.isEmpty {
+                VStack(spacing: 16) {
+                    let chunks = paginationModel.splittedEntries
+                    ForEach(Array(chunks.enumerated()), id: \.offset) { index, entries in
+                        if index >= 1 {
+                            Button {
+                                guard let first = entries.first, let previousLast = chunks[index - 1].last else {
+                                    return
+                                }
+                                let offset = max(first.position - 11, previousLast.position)
+                                let limit = min(first.position - offset - 1, 10)
+                                paginationModel.fetchEntries(offset: offset, limit: limit, type: .previous, at: index)
+                            } label: {
+                                Image(systemName: "chevron.up")
+                            }
+                            .buttonStyle(.bordered)
                         }
-                        .buttonStyle(.bordered)
-                    }
-                    ForEach(Array(entries.enumerated()), id: \.offset) { offset, entry in
-                        if offset >= 1 {
-                            RoundedRectangle(cornerRadius: 10)
-                                .fill(.secondary.opacity(0.2))
-                                .frame(height: 1)
+                        ForEach(Array(entries.enumerated()), id: \.offset) { offset, entry in
+                            if offset >= 1 {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(.secondary.opacity(0.2))
+                                    .frame(height: 1)
+                            }
+                            
+                            LeaderBoardListEntry(member: entry.user, position: entry.position)
                         }
-                        LeaderBoardListEntry(member: entry.user, position: entry.position)
-                    }
-                    if index < viewModel.splittedEntries.count - 1 {
-                        Button {
-                            let offset = entries.last!.position
-                            let limit = min(viewModel.splittedEntries[index + 1].first!.position - offset - 1, 10)
-                            viewModel.fetchEntries(offset: offset, limit: limit, type: .next, at: index)
-                        } label: {
-                            Image(systemName: "chevron.down")
+                        if index < chunks.count - 1 {
+                            Button {
+                                guard let last = entries.last, let nextFirst = chunks[index + 1].first else {
+                                    return
+                                }
+                                let offset = last.position
+                                let limit = min(nextFirst.position - offset - 1, 10)
+                                paginationModel.fetchEntries(offset: offset, limit: limit, type: .next, at: index)
+                            } label: {
+                                Image(systemName: "chevron.down")
+                            }
+                            .buttonStyle(.bordered)
                         }
-                        .buttonStyle(.bordered)
                     }
                 }
+                .padding()
+            } else {
+                switch suggestionModel.state {
+                case .idle:
+                    EmptyView()
+                case .loading:
+                    ProgressView()
+                case .success(let entries):
+                    VStack(spacing: 16) {
+                        ForEach(Array(entries.enumerated()), id: \.offset) { offset, entry in
+                            if offset >= 1 {
+                                RoundedRectangle(cornerRadius: 10)
+                                    .fill(.secondary.opacity(0.2))
+                                    .frame(height: 1)
+                            }
+                            LeaderBoardListEntry(member: entry.user, position: entry.position)
+                        }
+                    }
+                    .padding()
+                case .failure(let error):
+                    Label(error.localizedDescription, systemImage: "exclamationmark.triangle")
+                }
             }
-            .padding()
         }
+        .searchable(text: $suggestionModel.usernameFilter)
     }
 }
 

@@ -8,8 +8,15 @@
 import SwiftUI
 
 struct LeaderBoardListEntry: View {
+    private let currentUsername: String
     let member: User
     let position: Int
+    
+    init(member: User, position: Int) {
+        self.currentUsername = UserDefaults.standard.string(forKey: AuthenticationModel.USERNAME) ?? ""
+        self.member = member
+        self.position = position
+    }
     
     var body: some View {
         HStack(spacing: 8) {
@@ -17,19 +24,19 @@ struct LeaderBoardListEntry: View {
                 .font(.title2)
                 .foregroundStyle(position == 1 ? .yellow : position == 2 ? .gray : position == 3 ? .brown : .primary)
             
-            if let supports = member.supports {
-                Circle()
-                    .frame(width: 20)
-                    .overlay {
-                        Image(supports.nameShort)
-                            .resizable()
-                            .scaledToFill()
-                    }
-                    .clipShape(Circle())
-            }
+//            if let supports = member.supports {
+//                Circle()
+//                    .frame(width: 20)
+//                    .overlay {
+//                        Image(supports.nameShort)
+//                            .resizable()
+//                            .scaledToFill()
+//                    }
+//                    .clipShape(Circle())
+//            }
             
             HStack {
-                Text(member.name)
+                Text(currentUsername == member.username ? "Du" : member.name)
                     .font(.headline)
                 Text("@\(member.username)")
                     .font(.footnote)
@@ -37,6 +44,7 @@ struct LeaderBoardListEntry: View {
                 Spacer()
                 Text(String(member.points))
             }
+            .fontWeight(member.username == currentUsername ? .bold : .medium)
         }
     }
 }

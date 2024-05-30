@@ -11,7 +11,7 @@ import Combine
 
 enum AuthenticationState: Equatable {
     case pending
-    case authenticated(token: String)
+    case authenticated(token: String, username: String)
     case unauthenticated
     case failure(Error)
     
@@ -19,8 +19,8 @@ enum AuthenticationState: Equatable {
         switch (lhs, rhs) {
         case (.pending, .pending), (.unauthenticated, .unauthenticated):
             return true
-        case let (.authenticated(lhsValue), .authenticated(rhsValue)):
-            return lhsValue == rhsValue
+        case let (.authenticated(lhsToken, lhsUsername), .authenticated(rhsToken, rhsUsername)):
+            return lhsToken == rhsToken && lhsUsername == rhsUsername
         case let (.failure(lhsError as NSError), .failure(rhsError as NSError)):
             return lhsError == rhsError
         default:
@@ -105,6 +105,7 @@ class AuthenticationModel: ObservableObject {
     private var requests = PassthroughSubject<AnyPublisher<AuthResponse, Error>, Never>()
     private var cancellables = Set<AnyCancellable>()
     public static var TOKEN = "token"
+    public static var USERNAME = "username"
     
     public init(
         dataService: AuthenticationDataServiceProtocol = AuthenticationDataService()
@@ -135,7 +136,7 @@ class AuthenticationModel: ObservableObject {
                     self?.state = .failure(error)
                 }
             } receiveValue: { [weak self] result in
-                self?.state = .authenticated(token: result.token)
+                self?.state = .authenticated(token: result.token, username: result.user.username)
             }
             .store(in: &cancellables)
     }
@@ -228,7 +229,7 @@ struct AuthenticationView: View {
                     case .signIn:
                         authModel.signin(email: email, password: password)
                     case .signUp:
-                        authModel.signup(email: email, password: password, user: .init(username: username, name: name, supports: supports, points: 0))
+                        authModel.signup(email: email, password: password, user: .init(username: username, name: name, supports: supports, points: 0, joinedAt: .now))
                     }
                 }
                 .buttonStyle(.borderedProminent)

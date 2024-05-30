@@ -12,8 +12,11 @@ struct ContentView: View {
     
     init(authModel: AuthenticationModel = AuthenticationModel()) {
         _authModel = StateObject(wrappedValue: authModel)
-        if let token = UserDefaults.standard.string(forKey: AuthenticationModel.TOKEN) {
-            authModel.state = .authenticated(token: token)
+        if
+            let token = UserDefaults.standard.string(forKey: AuthenticationModel.TOKEN),
+            let username = UserDefaults.standard.string(forKey: AuthenticationModel.USERNAME)
+        {
+            authModel.state = .authenticated(token: token, username: username)
         }
     }
     
@@ -28,8 +31,9 @@ struct ContentView: View {
                 }
             }
             .onChange(of: authModel.state) {
-                if case .authenticated(let token) = authModel.state {
+                if case let .authenticated(token, username) = authModel.state {
                     UserDefaults.standard.set(token, forKey: AuthenticationModel.TOKEN)
+                    UserDefaults.standard.set(username, forKey: AuthenticationModel.USERNAME)
                 }
             }
             .toolbar {

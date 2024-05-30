@@ -20,11 +20,7 @@ struct LeaderboardPreview: View {
                     .font(.subheadline)
             }
             ForEach(leaderboard.entries) { entry in
-                HStack {
-                    LeaderBoardListEntry(member: entry.user, position: entry.position)
-                    Spacer()
-                    Text(String(entry.user.points))
-                }
+                LeaderBoardListEntry(member: entry.user, position: entry.position)
             }
         }
     }
