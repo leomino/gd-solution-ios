@@ -19,6 +19,7 @@ struct LeaderboardLoadingView: View {
     init(communityId: Community.ID, dataService: LeaderboardDataServiceProtocol = LeaderboardDataService()) {
         self.communityId = communityId
         _leaderboardModel = ObservedObject(wrappedValue: .init(state: .idle, dataService: dataService))
+        leaderboardModel.fetchPreview(for: communityId)
     }
     
     var body: some View {
@@ -32,11 +33,6 @@ struct LeaderboardLoadingView: View {
                 LeaderboardView(leaderboard: leaderboard)
             case .failure(let error):
                 Label(error.localizedDescription, systemImage: "exclamationmark.triangle")
-            }
-        }
-        .onAppear {
-            if case .idle = leaderboardModel.state {
-                leaderboardModel.fetchPreview(for: communityId)
             }
         }
     }
