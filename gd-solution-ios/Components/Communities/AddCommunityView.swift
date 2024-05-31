@@ -36,7 +36,7 @@ struct AddCommunityView: View {
     }
     
     var body: some View {
-        VStack(spacing: 16) {
+        VStack(spacing: 32) {
             Image(tournament.name)
                 .resizable()
                 .aspectRatio(contentMode: .fit)
@@ -44,6 +44,7 @@ struct AddCommunityView: View {
                 .padding()
                 .background(.secondary.opacity(0.2))
                 .clipShape(RoundedRectangle(cornerRadius: 10))
+                .frame(height: 300)
             TextField("Gemeinschaftsname", text: $name)
                 .autocorrectionDisabled()
                 .textFieldStyle(.roundedBorder)
@@ -56,7 +57,7 @@ struct AddCommunityView: View {
             default:
                 EmptyView()
             }
-            Button("Gemeinschaft erstellen") {
+            Button("Erstellen") {
                 viewModel.createCommunity(
                     .init(id: UUID(), name: name, tournament: tournament)
                 )

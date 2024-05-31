@@ -11,6 +11,7 @@ struct CommunitiesView: View {
     let tournament: Tournament
     @ObservedObject var viewModel: CommunitiesModel
     @ObservedObject var suggestionModel: CommunitySuggestionModel
+    
     @State private var isCreateCommunityPresented = false
     @State private var isJoinCommunityPresented = false
     
@@ -18,6 +19,13 @@ struct CommunitiesView: View {
         self.tournament = tournament
         _viewModel = ObservedObject(wrappedValue: .init(dataService: dataService))
         _suggestionModel = ObservedObject(wrappedValue: .init(dataService: dataService))
+    }
+    
+    var addNewGroupsDisabled: Bool {
+        if case .success(let t) = viewModel.state {
+            return t.count >= 5
+        }
+        return false
     }
     
     var body: some View {
@@ -60,9 +68,11 @@ struct CommunitiesView: View {
                     Button("Gruppe erstellen") {
                         isCreateCommunityPresented = true
                     }
+                    .disabled(addNewGroupsDisabled)
                     Button("Gruppe beitreten") {
                         isJoinCommunityPresented = true
                     }
+                    .disabled(addNewGroupsDisabled)
                 } label: {
                     Image(systemName: "ellipsis.circle")
                 }
@@ -74,9 +84,7 @@ struct CommunitiesView: View {
                     viewModel.insertCommunityInStore(community: community)
                 })
                 .navigationTitle("Gruppe erstellen")
-                .navigationBarTitleDisplayMode(.inline)
             }
-            .presentationDetents([.medium])
         }
         .sheet(isPresented: $isJoinCommunityPresented) {
             NavigationStack {
@@ -94,15 +102,3 @@ struct CommunitiesView: View {
         CommunitiesView(tournament: .mock, dataService: CommunityDataServiceMock())
     }
 }
-
-//#Preview("Loading") {
-//    NavigationStack {
-//        CommunitiesView(tournament: .mock, state: .loading, dataService: CommunityDataServiceMock())
-//    }
-//}
-//
-//#Preview("Failure") {
-//    NavigationStack {
-//        CommunitiesView(tournament: .mock, state: .failure(NSError.notFound), dataService: CommunityDataServiceMock())
-//    }
-//}

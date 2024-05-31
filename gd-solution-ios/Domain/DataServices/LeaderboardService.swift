@@ -69,7 +69,7 @@ class LeaderboardDataService: LeaderboardDataServiceProtocol {
         guard let token = UserDefaults.standard.string(forKey: AuthenticationModel.TOKEN) else {
             return Fail(error: URLError(.userAuthenticationRequired)).eraseToAnyPublisher()
         }
-        guard let url = URL(string: "http://localhost:3000/api/leaderboards/filter?communityId=\(communityId)&searchString=\(usernameFilter)") else {
+        guard let url = URL(string: "http://localhost:3000/api/leaderboards/search?communityId=\(communityId)&searchString=\(usernameFilter)") else {
             return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
         }
         
