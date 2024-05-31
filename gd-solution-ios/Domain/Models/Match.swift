@@ -8,12 +8,13 @@
 import Foundation
 
 struct MatchResult: Codable, Equatable {
-    var homeTeamScore: Int
-    var awayTeamScore: Int
+    var matchId: Match.ID
+    var homeTeamScore: Int?
+    var awayTeamScore: Int?
     var finalized: Bool
     
     static var mock: MatchResult {
-        .init(homeTeamScore: 0, awayTeamScore: 0, finalized: false)
+        .init(matchId: UUID(), homeTeamScore: 1, awayTeamScore: 2, finalized: false)
     }
 }
 

@@ -17,6 +17,13 @@ struct MatchListEntry: View {
         return "Noch nicht gewettet"
     }
     
+    var standing: String? {
+        if let homeTeamScore = match.result.homeTeamScore, let awayTeamScore = match.result.awayTeamScore {
+            return "\(homeTeamScore) zu \(awayTeamScore)"
+        }
+        return nil
+    }
+    
     var body: some View {
         HStack(spacing: 16) {
             HStack(spacing: 4) {
@@ -56,6 +63,17 @@ struct MatchListEntry: View {
                     .minimumScaleFactor(0.9)
                     .font(.subheadline)
                     .foregroundStyle(.secondary)
+            }
+        }
+        .overlay(alignment: .topTrailing) {
+            if let standing {
+                Text(standing)
+                    .padding(2)
+                    .font(.footnote)
+                    .background {
+                        RoundedRectangle(cornerRadius: 5)
+                            .fill(.blue.opacity(0.2))
+                    }
             }
         }
     }

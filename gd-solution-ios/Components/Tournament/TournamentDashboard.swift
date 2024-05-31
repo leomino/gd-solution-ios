@@ -98,6 +98,9 @@ struct TournamentDashboard: View {
         .onAppear {
             if case .idle = matchViewModel.state {
                 matchViewModel.fetchNextMatches()
+                Task {
+                    await matchViewModel.listenToMatchResultUpdates()
+                }
             }
             if case .idle = leaderboardViewModel.state {
                 leaderboardViewModel.fetchPreviews()

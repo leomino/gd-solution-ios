@@ -49,6 +49,18 @@
             ReferencedContainer = "container:gd-solution-ios.xcodeproj">
          </BuildableReference>
       </BuildableProductRunnable>
+      <EnvironmentVariables>
+         <EnvironmentVariable
+            key = "SUPABASE_URL"
+            value = "https://vzvnmzptgrrarevjnyhu.supabase.co"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+         <EnvironmentVariable
+            key = "SUPABASE_KEY"
+            value = "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InZ6dm5tenB0Z3JyYXJldmpueWh1Iiwicm9sZSI6ImFub24iLCJpYXQiOjE3MTU1MTY5NTEsImV4cCI6MjAzMTA5Mjk1MX0.CRCYgxG84wMtOvLfjbiIMZRVRCJcUI0Yp55FDNkeqiA"
+            isEnabled = "YES">
+         </EnvironmentVariable>
+      </EnvironmentVariables>
    </LaunchAction>
    <ProfileAction
       buildConfiguration = "Release"
