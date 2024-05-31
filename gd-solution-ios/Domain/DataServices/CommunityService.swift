@@ -27,7 +27,7 @@ class CommunityDataService: CommunityDataServiceProtocol {
             .eraseToAnyPublisher()
     }
     
-    func createCommunity(community: Community) -> AnyPublisher<Community, Error> {
+    func create(_ community: Community) -> AnyPublisher<Community, Error> {
         guard let token = UserDefaults.standard.string(forKey: AuthenticationModel.TOKEN) else {
             return Fail(error: URLError(.userAuthenticationRequired)).eraseToAnyPublisher()
         }
@@ -56,7 +56,7 @@ class CommunityDataService: CommunityDataServiceProtocol {
         guard let token = UserDefaults.standard.string(forKey: AuthenticationModel.TOKEN) else {
             return Fail(error: URLError(.userAuthenticationRequired)).eraseToAnyPublisher()
         }
-        guard let url = URL(string: "http://localhost:3000/api/communities/search?searchString=\(searchString)") else {
+        guard let url = URL(string: "http://localhost:3000/api/communities/search?name=\(searchString)") else {
             return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
         }
         
@@ -70,11 +70,11 @@ class CommunityDataService: CommunityDataServiceProtocol {
             .eraseToAnyPublisher()
     }
     
-    func joinCommunity(communityId: Community.ID) -> AnyPublisher<Community, Error> {
+    func join(communityId: Community.ID) -> AnyPublisher<Community, Error> {
         guard let token = UserDefaults.standard.string(forKey: AuthenticationModel.TOKEN) else {
             return Fail(error: URLError(.userAuthenticationRequired)).eraseToAnyPublisher()
         }
-        guard let url = URL(string: "http://localhost:3000/api/communities/join/\(communityId)") else {
+        guard let url = URL(string: "http://localhost:3000/api/communities/join?id=\(communityId)") else {
             return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
         }
         
@@ -99,11 +99,11 @@ class CommunityDataServiceMock: CommunityDataServiceProtocol {
         Just([.mock]).tryMap { $0 }.eraseToAnyPublisher()
     }
     
-    func createCommunity(community: Community) -> AnyPublisher<Community, Error> {
+    func create(_ community: Community) -> AnyPublisher<Community, Error> {
         Just(community).tryMap { $0 }.eraseToAnyPublisher()
     }
     
-    func joinCommunity(communityId: Community.ID) -> AnyPublisher<Community, Error> {
+    func join(communityId: Community.ID) -> AnyPublisher<Community, Error> {
         Just(.mock).tryMap { $0 }.eraseToAnyPublisher()
     }
 }
@@ -111,6 +111,6 @@ class CommunityDataServiceMock: CommunityDataServiceProtocol {
 protocol CommunityDataServiceProtocol {
     func fetchAll() -> AnyPublisher<[Community], Error>
     func searchBy(searchString: String) -> AnyPublisher<[Community], Error>
-    func createCommunity(community: Community) -> AnyPublisher<Community, Error>
-    func joinCommunity(communityId: Community.ID) -> AnyPublisher<Community, Error>
+    func create(_ community: Community) -> AnyPublisher<Community, Error>
+    func join(communityId: Community.ID) -> AnyPublisher<Community, Error>
 }

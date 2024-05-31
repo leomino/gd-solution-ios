@@ -16,11 +16,11 @@ class CommunityModel: LoadingStateModel<Community> {
     }
     
     func createCommunity(_ community: Community) {
-        requests.send(dataService.createCommunity(community: community))
+        requests.send(dataService.create(community))
     }
     
     func joinCommunity(communityId: Community.ID) {
-        requests.send(dataService.joinCommunity(communityId: communityId))
+        requests.send(dataService.join(communityId: communityId))
     }
 }
 

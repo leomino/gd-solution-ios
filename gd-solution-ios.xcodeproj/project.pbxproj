@@ -24,7 +24,6 @@
 		607925D22BF3758C0077B6F8 /* MatchDay.swift in Sources */ = {isa = PBXBuildFile; fileRef = 607925D12BF3758C0077B6F8 /* MatchDay.swift */; };
 		60EACE592C0372660057540B /* AuthenticationView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE582C0372660057540B /* AuthenticationView.swift */; };
 		60EACE5B2C05DA380057540B /* AddCommunityView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE5A2C05DA380057540B /* AddCommunityView.swift */; };
-		60EACE5E2C05E76A0057540B /* UserService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE5D2C05E76A0057540B /* UserService.swift */; };
 		60EACE632C087D690057540B /* LeaderboardService.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE622C087D690057540B /* LeaderboardService.swift */; };
 		60EACE652C087D8B0057540B /* Leaderboard.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE642C087D8B0057540B /* Leaderboard.swift */; };
 		60EACE672C0896EA0057540B /* LeaderboardView.swift in Sources */ = {isa = PBXBuildFile; fileRef = 60EACE662C0896EA0057540B /* LeaderboardView.swift */; };
@@ -71,7 +70,6 @@
 		607925D12BF3758C0077B6F8 /* MatchDay.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = MatchDay.swift; sourceTree = "<group>"; };
 		60EACE582C0372660057540B /* AuthenticationView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AuthenticationView.swift; sourceTree = "<group>"; };
 		60EACE5A2C05DA380057540B /* AddCommunityView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AddCommunityView.swift; sourceTree = "<group>"; };
-		60EACE5D2C05E76A0057540B /* UserService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = UserService.swift; sourceTree = "<group>"; };
 		60EACE622C087D690057540B /* LeaderboardService.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardService.swift; sourceTree = "<group>"; };
 		60EACE642C087D8B0057540B /* Leaderboard.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Leaderboard.swift; sourceTree = "<group>"; };
 		60EACE662C0896EA0057540B /* LeaderboardView.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LeaderboardView.swift; sourceTree = "<group>"; };
@@ -200,7 +198,6 @@
 			isa = PBXGroup;
 			children = (
 				60EACE622C087D690057540B /* LeaderboardService.swift */,
-				60EACE5D2C05E76A0057540B /* UserService.swift */,
 				60F6508E2C023C1A00330123 /* PredictionService.swift */,
 				60F650852C01BFEE00330123 /* CommunityService.swift */,
 				60F650822C01BD7700330123 /* TournamentService.swift */,
@@ -371,7 +368,6 @@
 				60EACE632C087D690057540B /* LeaderboardService.swift in Sources */,
 				60F650862C01BFEE00330123 /* CommunityService.swift in Sources */,
 				607925BF2BF0E98F0077B6F8 /* MatchService.swift in Sources */,
-				60EACE5E2C05E76A0057540B /* UserService.swift in Sources */,
 				607925BC2BF0E95F0077B6F8 /* Publisher.swift in Sources */,
 				60F6508F2C023C1A00330123 /* PredictionService.swift in Sources */,
 				60F650802C0125BD00330123 /* TournamentDashboard.swift in Sources */,

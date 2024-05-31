@@ -20,7 +20,7 @@ class LeaderboardModel: LoadingStateModel<Leaderboard> {
     }
     
     func fetchPreview(for communityId: Community.ID) {
-        requests.send(dataService.fetchPreview(for: communityId))
+        requests.send(dataService.fetchBy(communityId))
     }
 }
 
@@ -41,7 +41,7 @@ class LeaderboardsModel: LoadingStateModel<[Leaderboard]> {
     }
     
     func fetchPreviews() {
-        requests.send(dataService.fetchPreviews())
+        requests.send(dataService.fetchAll())
     }
 }
 
@@ -103,7 +103,7 @@ class LeaderboardPaginationModel: LoadingStateModelNE<([LeaderboardEntry], Leade
     }
     
     func fetchEntries(offset: Int, limit: Int, type: RequestType, at: Int) {
-        requests.send(dataService.fetchEntries(in: leaderboard.community.id, offset: offset, limit: limit, type: type, at: at))
+        requests.send(dataService.fetchPagination(in: leaderboard.community.id, offset: offset, limit: limit, type: type, at: at))
     }
 }
 
@@ -123,7 +123,7 @@ class LeaderboardSuggestionModel: LoadingStateModel<[LeaderboardEntry]> {
                 guard !searchString.isEmpty else {
                     return
                 }
-                self?.requests.send(dataService.fetchEntries(in: community.id, with: searchString))
+                self?.requests.send(dataService.searchEntries(in: community.id, with: searchString))
             }
             .store(in: &cancellables)
     }
