@@ -10,7 +10,7 @@ import SwiftUI
 struct TournamentDashboard: View {
     let tournament: Tournament
     @ObservedObject var matchViewModel: MatchesViewModel
-    @ObservedObject var leaderboardViewModel: LeaderboardModel
+    @ObservedObject var leaderboardViewModel: LeaderboardsModel
     @State private var selectedMatch: Match? = nil
     
     init(
@@ -26,7 +26,7 @@ struct TournamentDashboard: View {
     init(
         tournament: Tournament,
         matchesViewModel: MatchesViewModel,
-        leaderboardViewModel: LeaderboardModel
+        leaderboardViewModel: LeaderboardsModel
     ) {
         self.tournament = tournament
         _matchViewModel = ObservedObject(wrappedValue: matchesViewModel)

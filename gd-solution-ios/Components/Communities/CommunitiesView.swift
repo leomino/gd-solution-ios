@@ -39,7 +39,7 @@ struct CommunitiesView: View {
                 List {
                     ForEach(communities) { community in
                         NavigationLink {
-                            Text(community.name)
+                            LeaderboardLoadingView(communityId: community.id)
                         } label: {
                             HStack {
                                 Text(community.name)

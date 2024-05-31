@@ -7,6 +7,35 @@
 
 import SwiftUI
 
+struct LeaderboardLoadingView: View {
+    let communityId: Community.ID
+    @ObservedObject private var leaderboardModel: LeaderboardModel
+    
+    init(leaderboard: Leaderboard, dataService: LeaderboardDataServiceProtocol = LeaderboardDataService()) {
+        communityId = leaderboard.community.id
+        _leaderboardModel = ObservedObject(wrappedValue: .init(state: .success(leaderboard), dataService: dataService))
+    }
+    
+    init(communityId: Community.ID, dataService: LeaderboardDataServiceProtocol = LeaderboardDataService()) {
+        self.communityId = communityId
+        _leaderboardModel = ObservedObject(wrappedValue: .init(state: .idle, dataService: dataService))
+        leaderboardModel.fetchPreview(for: communityId)
+    }
+    
+    var body: some View {
+        switch leaderboardModel.state {
+        case .idle:
+            EmptyView()
+        case .loading:
+            ProgressView()
+        case .success(let leaderboard):
+            LeaderboardView(leaderboard: leaderboard)
+        case .failure(let error):
+            Label(error.localizedDescription, systemImage: "exclamationmark.triangle")
+        }
+    }
+}
+
 struct LeaderboardView: View {
     @ObservedObject private var paginationModel: LeaderboardPaginationModel
     @ObservedObject private var suggestionModel: LeaderboardSuggestionModel

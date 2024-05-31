@@ -38,6 +38,24 @@ class LeaderboardDataService: LeaderboardDataServiceProtocol {
             .eraseToAnyPublisher()
     }
     
+    func fetchPreview(for communityId: Community.ID) -> AnyPublisher<Leaderboard, Error> {
+        guard let token = UserDefaults.standard.string(forKey: AuthenticationModel.TOKEN) else {
+            return Fail(error: URLError(.userAuthenticationRequired)).eraseToAnyPublisher()
+        }
+        guard let url = URL(string: "http://localhost:3000/api/leaderboards/previews/\(communityId)") else {
+            return Fail(error: URLError(.badURL)).eraseToAnyPublisher()
+        }
+        
+        var request = URLRequest(url: url)
+        request.setValue("Bearer \(token)", forHTTPHeaderField: "Authorization")
+        request.httpMethod = "GET"
+        
+        return URLSession.shared.dataTaskPublisher(for: request)
+            .validateResponse()
+            .decode(type: Leaderboard.self, decoder: JSONCoder.decoder)
+            .eraseToAnyPublisher()
+    }
+    
     func fetchEntries(
         in communityId: Community.ID,
         offset: Int,
@@ -93,6 +111,10 @@ class LeaderboardDataServiceMock: LeaderboardDataServiceProtocol {
         Just([.mock, .mock, .mock]).tryMap { $0 }.eraseToAnyPublisher()
     }
     
+    func fetchPreview(for communityId: Community.ID) -> AnyPublisher<Leaderboard, Error> {
+        Just(.mock).tryMap { $0 }.eraseToAnyPublisher()
+    }
+    
     func fetchEntries(
         in communityId: Community.ID,
         offset: Int,
@@ -111,6 +133,7 @@ class LeaderboardDataServiceMock: LeaderboardDataServiceProtocol {
 protocol LeaderboardDataServiceProtocol {
     func fetchAll() -> AnyPublisher<[Leaderboard], Error>
     func fetchPreviews() -> AnyPublisher<[Leaderboard], Error>
+    func fetchPreview(for communityId: Community.ID) -> AnyPublisher<Leaderboard, Error>
     func fetchEntries(
         in communityId: Community.ID,
         offset: Int,

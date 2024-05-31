@@ -7,7 +7,24 @@
 
 import SwiftUI
 
-class LeaderboardModel: LoadingStateModel<[Leaderboard]> {
+class LeaderboardModel: LoadingStateModel<Leaderboard> {
+    let dataService: LeaderboardDataServiceProtocol
+    init(dataService: LeaderboardDataServiceProtocol = LeaderboardDataService()) {
+        self.dataService = dataService
+        super.init(state: .idle)
+    }
+    
+    init(state: LoadingState<Leaderboard>, dataService: LeaderboardDataServiceProtocol) {
+        self.dataService = dataService
+        super.init(state: state)
+    }
+    
+    func fetchPreview(for communityId: Community.ID) {
+        requests.send(dataService.fetchPreview(for: communityId))
+    }
+}
+
+class LeaderboardsModel: LoadingStateModel<[Leaderboard]> {
     let dataService: LeaderboardDataServiceProtocol
     init(dataService: LeaderboardDataServiceProtocol = LeaderboardDataService()) {
         self.dataService = dataService

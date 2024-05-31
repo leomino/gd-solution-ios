@@ -65,6 +65,12 @@ struct JoinCommunityView: View {
             .disabled(selectedCommunityId == nil)
             .buttonStyle(.borderedProminent)
         }
+        .onChange(of: communityModel.state) {
+            if case .success(let joined) = communityModel.state {
+                onJoinSuccess(joined)
+                dismiss.callAsFunction()
+            }
+        }
         .padding()
     }
 }
