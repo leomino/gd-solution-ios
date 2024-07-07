@@ -2,21 +2,20 @@
 
 <div align="center">
   <a href="https://testflight.apple.com/join/oIDNwtUT">
-    <img width="300" alt="Screenshot 2024-06-10 at 14 32 44" src="https://github.com/leomino/gd-solution-ios/assets/45589096/eb5647e3-c099-41e9-a126-7d899182578f">
+    <img width="200" alt="Screenshot 2024-06-10 at 14 32 44" src="https://github.com/leomino/gd-solution-ios/assets/45589096/eb5647e3-c099-41e9-a126-7d899182578f">
   </a>
 </div>
-
 <hr />
 
 Videolink to the recording of the Apps functionalities: https://youtu.be/eFOUTrsBFQ0
-
-Test via testflight: https://testflight.apple.com/join/oIDNwtUT
 
 Repository to the Serverside of this challange: https://github.com/leomino/gd-solution-api
 
 This challenge was very enjoyable, and I experienced a significant learning curve. I decided to create a mobile app using SwiftUI to improve my skills in that area, especially 
 since I transitioned from iOS development to web technologies a few months ago. I have had one year of experience in SwiftUI.
 All other used technologies like Bun, Hono, Drizzle, Supabase and Redis were new to me.
+
+<img width="1062" alt="Screenshot 2024-07-08 at 00 09 47" src="https://github.com/leomino/gd-solution-ios/assets/45589096/fa7cb659-7a31-4ee0-bb60-9c2dea4aab68">
 
 ## Authentication
 Even though it wasn't required, I implemented JWT authentication using Firestore. This allowed me to design my API endpoints in a way that I preferred. I could justify this
