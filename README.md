@@ -1,4 +1,4 @@
-# This repository contains the iOS-Part to my solution for the 5th Scholarship of Check24 ["GenDev Betting Challenge"](https://github.com/check24-scholarships/check24-betting-challenge)
+# This repository contains the iOS-Part to my solution for the 5th Scholarship of Check24 ["GenDev Betting Challenge"](https://github.com/check24-scholarships/check24-betting-challenge) (Accepted)
 
 <div align="center">
   <a href="https://testflight.apple.com/join/oIDNwtUT">
@@ -11,16 +11,13 @@ Videolink to the recording of the Apps functionalities: https://youtu.be/eFOUTrs
 
 Repository to the Serverside of this challange: https://github.com/leomino/gd-solution-api
 
-This challenge was very enjoyable, and I experienced a significant learning curve. I decided to create a mobile app using SwiftUI to improve my skills in that area, especially 
-since I transitioned from iOS development to web technologies a few months ago. I have had one year of experience in SwiftUI.
+This challenge was very enjoyable, and I experienced a significant learning curve. I decided to create a mobile app using SwiftUI to improve my skills in that area. I have had one year of experience in SwiftUI.
 All other used technologies like Bun, Hono, Drizzle, Supabase and Redis were new to me.
 
 <img width="1062" alt="Screenshot 2024-07-08 at 00 09 47" src="https://github.com/leomino/gd-solution-ios/assets/45589096/fa7cb659-7a31-4ee0-bb60-9c2dea4aab68">
 
 ## Authentication
-Even though it wasn't required, I implemented JWT authentication using Firestore. This allowed me to design my API endpoints in a way that I preferred. I could justify this
-choice by noting that if this project were to go live, this approach would save considerable development time. I also wanted to learn how to build custom JWT authentication.
-
+Even though it wasn't required, I implemented JWT authentication using Firestore. This allowed me to design my API endpoints in a way that I preferred, including giving users roles (like the admin role for the admin dashboard).
 ## Database
 I chose Supabase as the database because of its generous free tier and built-in real-time functionality. Supabase had been on my "to-try" list for a long time, so I was glad
 to finally experiment with it. I specifically opted not to use Supabase's authentication service, instead choosing Firestore, to avoid relying entirely on a single service provider.
@@ -60,14 +57,6 @@ Although I have had good experiences with the TCA library, I decided not to use 
 Instead, I heavily used Combine and Publishers to handle the app state. To manage data across all views without injecting a top-level object, I used callback functions.
 For example, when placing a bet in the `PredictionView`, the callback function onUpsert is called to carry the upserted data back to the `TournamentDashboardView`.
 This approach allows the new data to be used to update the state without needing to re-call the server unnecessarily. My approach minimizes network traffic and at the same time reduces View-re-rendering.
-
-## Pinning users feature
-Unfortunately, I didn't have enough time to implement the pinning functionality for other users. Implementing this feature isn't difficult; I would create another table called
-"communities_pinned_users" or something similar, which would store the following structure: (currentUsername, pinnedUser, communityId). Left swiping on a list can be handled using 
-SwiftUI's "swipeActions" modifier, which provides the client-side functionality. When pinning a user, it should send a request to the server to upsert a new entry in the aforementioned table.
-The server would also need to provide a DELETE endpoint to remove pinned users.
-To include pinned users in the leaderboard generations, I would use the `ZREVRANK WITHSCORES` command to retrieve the rank and scores for the pinned entries.
-This could be done in O(log(n)) time.
 
 ## Possible Optimizations
 - Messaging Queue Service: Implementing a messaging queue service like RabbitMQ or ActiveMQ could significantly improve performance. By offloading prediction upsertings and pinning
