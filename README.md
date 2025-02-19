@@ -1,12 +1,5 @@
 # This repository contains the iOS-Part to my solution for the 5th Scholarship of Check24 ["GenDev Betting Challenge"](https://github.com/check24-scholarships/check24-betting-challenge) (Accepted)
 
-<div align="center">
-  <a href="https://testflight.apple.com/join/oIDNwtUT">
-    <img width="200" alt="Screenshot 2024-06-10 at 14 32 44" src="https://github.com/leomino/gd-solution-ios/assets/45589096/eb5647e3-c099-41e9-a126-7d899182578f">
-  </a>
-</div>
-<hr />
-
 Videolink to the recording of the Apps functionalities: https://youtu.be/eFOUTrsBFQ0
 
 Repository to the Serverside of this challange: https://github.com/leomino/gd-solution-api
@@ -17,17 +10,11 @@ All other used technologies like Bun, Hono, Drizzle, Supabase and Redis were new
 <img width="1062" alt="Screenshot 2024-07-08 at 00 09 47" src="https://github.com/leomino/gd-solution-ios/assets/45589096/fa7cb659-7a31-4ee0-bb60-9c2dea4aab68">
 
 ## Authentication
-Even though it wasn't required, I implemented JWT authentication using Firestore. This allowed me to design my API endpoints in a way that I preferred, including giving users roles (like the admin role for the admin dashboard).
-## Database
-I chose Supabase as the database because of its generous free tier and built-in real-time functionality. Supabase had been on my "to-try" list for a long time, so I was glad
-to finally experiment with it. I specifically opted not to use Supabase's authentication service, instead choosing Firestore, to avoid relying entirely on a single service provider.
-
-<img width="1018" alt="Screenshot 2024-06-24 at 10 21 58" src="https://github.com/leomino/gd-solution-ios/assets/45589096/f8d77ea3-d110-4972-b384-6cb15a1c1eff">
+I implemented JWT authentication using Firestore. This allowed me to design my API endpoints in a way that I preferred, including giving users roles (like the admin role for the admin dashboard).
 
 ## Leaderboard generation
-To efficiently generate leaderboards for up to 2 million users, I use Redis with `SortedSets` to store usernames alongside their respective scores for each community.
-The server first retrieves all communities joined by the requesting user from supabase. It then creates Promises to generate the leaderboards for each community from redis, resolving them
-concurrently.
+To efficiently generate leaderboards for up to 2 million users, the app uses Redis with `SortedSets` to store usernames alongside their respective scores for each community.
+The server first retrieves all communities joined by the requesting user from supabase. Then creates Promises to generate the leaderboards for each community from redis, resolving them concurrently.
 By using the `ZRANGE WITHSCORES` command, this allows for leaderboard generation in O(log(n) + m) time, where `n` is the total number of community members and `m` is the number of members retrieved.
 
 ## Leaderboard previews
@@ -40,6 +27,12 @@ To retrieve the necessary ranges from the leaderboard efficiently I use `ZRANGEW
 community members and `m` is the number of members retrieved (always between one and six, so neglectable). To make it even more efficient, all necessary ranges are retrieved in a single
 redis request using `multi` execution.
 This algorithm is written in the server: [src/leaderboard/index.ts:generateLeaderboard(...)](https://github.com/leomino/gd-solution-api/blob/main/src/leaderboards/index.ts).
+
+## Database
+I chose Supabase as the database because of its generous free tier and built-in real-time functionality. Supabase had been on my "to-try" list for a long time, so I was glad
+to finally experiment with it. I specifically opted not to use Supabase's authentication service, instead choosing Firestore, to avoid relying entirely on a single service provider.
+
+<img width="1018" alt="Screenshot 2024-06-24 at 10 21 58" src="https://github.com/leomino/gd-solution-ios/assets/45589096/f8d77ea3-d110-4972-b384-6cb15a1c1eff">
 
 ## Real time updates:
 I implemented real-time updates in the dashboard for matches that are currently being played or are about to start in the `TournamentDashboard` with the `MatchesViewModel`.
